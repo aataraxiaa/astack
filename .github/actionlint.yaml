@@ -1,0 +1,7 @@
+self-hosted-runner:
+  labels:
+    - astack-validation
+config-variables:
+  - ASTACK_UPSTREAM_AUTOMATION
+  - ASTACK_AUTOPUBLISH
+  - ASTACK_RUNTIME_CHECK

@@ -1,0 +1,15 @@
+{
+  "name": "astack",
+  "owner": {
+    "name": "AStack contributors"
+  },
+  "plugins": [
+    {
+      "name": "astack",
+      "source": "./plugins/astack",
+      "description": "PStack adapted for Claude Code, Codex, and Apple development.",
+      "version": "0.1.0"
+    }
+  ],
+  "description": "AStack workflows for Claude Code, Codex, and Apple development."
+}

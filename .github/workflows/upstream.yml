@@ -1,0 +1,135 @@
+name: Adapt original PStack
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: astack-upstream-release
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.ASTACK_UPSTREAM_AUTOMATION == 'true')
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.adapt.outputs.changed }}
+      version: ${{ steps.adapt.outputs.version }}
+      commit: ${{ steps.package.outputs.commit }}
+      checksum: ${{ steps.package.outputs.checksum }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: "1.3.14"
+      - id: adapt
+        run: bun tools/update-upstream.mjs --apply --report-dir "$RUNNER_TEMP/astack-reports"
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - if: steps.adapt.outputs.changed == 'true'
+        run: bash tools/check.sh
+      - id: package
+        if: steps.adapt.outputs.changed == 'true'
+        env:
+          BASE_COMMIT: ${{ github.sha }}
+        run: |
+          git diff --check
+          git config user.name 'AStack release bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add plugins tools VERSION CHANGES.md docs/reference.md
+          git commit -m "Adapt original PStack for AStack $(cat VERSION)"
+          mkdir -p "$RUNNER_TEMP/astack-candidate"
+          git bundle create "$RUNNER_TEMP/astack-candidate/candidate.bundle" "$BASE_COMMIT..HEAD"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "checksum=$(sha256sum "$RUNNER_TEMP/astack-candidate/candidate.bundle" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+      - if: steps.adapt.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: astack-candidate
+          path: ${{ runner.temp }}/astack-candidate
+          if-no-files-found: error
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: astack-upstream-report
+          path: ${{ runner.temp }}/astack-reports
+          if-no-files-found: warn
+  runtime:
+    needs: prepare
+    if: needs.prepare.outputs.changed == 'true' && vars.ASTACK_AUTOPUBLISH == 'true'
+    runs-on: [self-hosted, macOS, astack-validation]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: astack-candidate
+          path: ${{ runner.temp }}/astack-candidate
+      - env:
+          EXPECTED_HASH: ${{ needs.prepare.outputs.checksum }}
+          EXPECTED_COMMIT: ${{ needs.prepare.outputs.commit }}
+          RUNTIME_CHECK: ${{ vars.ASTACK_RUNTIME_CHECK }}
+        run: |
+          test "$(shasum -a 256 "$RUNNER_TEMP/astack-candidate/candidate.bundle" | cut -d ' ' -f 1)" = "$EXPECTED_HASH"
+          git fetch "$RUNNER_TEMP/astack-candidate/candidate.bundle" HEAD
+          test "$(git rev-parse FETCH_HEAD)" = "$EXPECTED_COMMIT"
+          git checkout --detach FETCH_HEAD
+          case "$RUNTIME_CHECK" in
+            "$PWD"/*) exit 1 ;;
+            /*) test -x "$RUNTIME_CHECK" ;;
+            *) exit 1 ;;
+          esac
+          "$RUNTIME_CHECK" "$PWD/plugins/astack" "$RUNNER_TEMP/astack-runtime-evidence"
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: astack-runtime-evidence
+          path: ${{ runner.temp }}/astack-runtime-evidence
+          if-no-files-found: error
+  publish:
+    needs: [prepare, runtime]
+    if: needs.runtime.result == 'success' && vars.ASTACK_AUTOPUBLISH == 'true'
+    runs-on: ubuntu-latest
+    environment: astack-release
+    permissions:
+      contents: write # Publish only the candidate checked by both earlier jobs.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: astack-candidate
+          path: ${{ runner.temp }}/astack-candidate
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_COMMIT: ${{ github.sha }}
+          EXPECTED_COMMIT: ${{ needs.prepare.outputs.commit }}
+          EXPECTED_HASH: ${{ needs.prepare.outputs.checksum }}
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          test "$(sha256sum "$RUNNER_TEMP/astack-candidate/candidate.bundle" | cut -d ' ' -f 1)" = "$EXPECTED_HASH"
+          git fetch "$RUNNER_TEMP/astack-candidate/candidate.bundle" HEAD
+          test "$(git rev-parse FETCH_HEAD)" = "$EXPECTED_COMMIT"
+          git checkout --detach FETCH_HEAD
+          test "$(cat VERSION)" = "$RELEASE_VERSION"
+          gh auth setup-git
+          git fetch origin main --tags
+          remote_head=$(git rev-parse origin/main)
+          test "$remote_head" = "$BASE_COMMIT" || test "$remote_head" = "$EXPECTED_COMMIT"
+          tag="v$RELEASE_VERSION"
+          if git rev-parse --verify "refs/tags/$tag" >/dev/null 2>&1; then
+            test "$(git rev-parse "$tag^{commit}")" = "$EXPECTED_COMMIT"
+          else
+            git tag "$tag" "$EXPECTED_COMMIT"
+          fi
+          git push --atomic origin HEAD:refs/heads/main "refs/tags/$tag"
+          git archive --format=zip --output="$RUNNER_TEMP/astack-$RELEASE_VERSION.zip" HEAD plugins/astack LICENSE LICENSE-cursor-team-kit NOTICE.md VERSION tools/upstream.json tools/provenance.json
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            gh release create "$tag" --verify-tag --title "AStack $RELEASE_VERSION" --notes-file CHANGES.md "$RUNNER_TEMP/astack-$RELEASE_VERSION.zip"
+          fi

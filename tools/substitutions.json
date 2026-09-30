@@ -1,0 +1,447 @@
+{
+  "substitutions": [
+    {
+      "pattern": "The system prompt names the workspace's `agent-transcripts/` directory.",
+      "replacement": "Claude Code stores them at `~/.claude/projects/<encoded-cwd>/*.jsonl`, where `<encoded-cwd>` is the workspace's working directory with `/` \u2192 `-`.",
+      "rationale": "Claude Code's system prompt does not name a transcripts directory, so the port names the path and its encoding"
+    },
+    {
+      "pattern": "Spawn Comment Sicko, fix",
+      "replacement": "Spawn the comment-sicko subagent, fix",
+      "rationale": "the menu description names the plugin agent by its file name"
+    },
+    {
+      "pattern": "Spawn `Task` with `subagent_type: \"Comment Sicko\"`",
+      "replacement": "Spawn an `Agent` with `subagent_type: \"astack:comment-sicko\"`",
+      "rationale": "plugin agents register under the plugin namespace by file name (#58); must precede the `Task` rule"
+    },
+    {
+      "pattern": "Comment Sicko",
+      "files": "^skills/no-comments/",
+      "replacement": "comment-sicko",
+      "rationale": "the agent's registered name is its file name"
+    },
+    {
+      "pattern": "No `eval`, `test`, `judge`, `experiment`, `rubric`, `score`, `compare`, `benchmark`, `candidate`, or `arena` in any directory",
+      "replacement": "None of the words eval, test, judge, experiment, rubric, score, compare, benchmark, candidate, or arena in any directory",
+      "rationale": "the Claude plugin directory validator reads a backticked eval as a shell execute pattern and holds the submission (0.9.46, #108)"
+    },
+    {
+      "pattern": "list the available MCPs from the Cursor environment. Use the available-tools map when present. Otherwise inspect the `mcps/` directory Cursor exposes for enabled MCP servers.",
+      "replacement": "list the available MCPs in the Claude Code environment. Use the tool list at the top of the system prompt (every MCP appears as a tool with prefix `mcp__<server>__<name>`). Otherwise read `.mcp.json` in the plugin/project, or run `claude mcp list`.",
+      "rationale": "where Claude Code exposes its MCP servers"
+    },
+    {
+      "regex": "default to one each on `(?:claude|gpt|grok|gemini|composer)-[^`]+`, `(?:claude|gpt|grok|gemini|composer)-[^`]+`, `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/arena/SKILL\\.md$",
+      "replacement": "run one each on the defaults in [Models](#models).",
+      "rationale": "the runner defaults are stamped into the Models section"
+    },
+    {
+      "regex": "choose from `(?:claude|gpt|grok|gemini|composer)-[^`]+`, `(?:claude|gpt|grok|gemini|composer)-[^`]+`, `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/arena/SKILL\\.md$",
+      "replacement": "choose from the runner defaults in [Models](#models).",
+      "rationale": "the cross-judge pool defaults to the stamped runners"
+    },
+    {
+      "regex": "With no family match, use `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/arena/SKILL\\.md$",
+      "replacement": "With no family match, use the single-role default in [Models](#models).",
+      "rationale": "the fallback model is the stamped single-role default"
+    },
+    {
+      "regex": "use `(?:claude|gpt|grok|gemini|composer)-[^`]+`, `(?:claude|gpt|grok|gemini|composer)-[^`]+`, `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/architect/SKILL\\.md$",
+      "replacement": "use the defaults in [Models](#models).",
+      "rationale": "the runner defaults are stamped into the Models section"
+    },
+    {
+      "regex": "use `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/swarm/SKILL\\.md$",
+      "replacement": "use the default in [Models](#models).",
+      "rationale": "the worker default is stamped into the Models section"
+    },
+    {
+      "pattern": "Use the `interrogate reviewers` line in `~/.cursor/rules/pstack-models.mdc`,",
+      "replacement": "Use the `interrogate reviewers` line in the `astack-models.md` override sheet (`/setup-pstack` lists its path per runtime),",
+      "rationale": "interrogate has no Models section to name the sheet's home, so the sentence points at setup-pstack; must precede the sheet-path rule"
+    },
+    {
+      "pattern": "(usually `.cursor/skills/verify-*/`)",
+      "replacement": "(`.claude/skills/verify/`, or `.claude/skills/verify-*/` from an older generator)",
+      "rationale": "a project skill named verify replaces Claude Code's user-only bundled /verify (#71); must precede the .cursor/skills/ rule"
+    },
+    {
+      "pattern": "run `scripts/worktree-audit.sh`",
+      "replacement": "run `skills/poteto-mode/scripts/worktree-audit.mjs` under the installed plugin",
+      "rationale": "the port ships its own audit script; a skill-relative path does not resolve from the working directory"
+    },
+    {
+      "pattern": "`.cursor/worktrees/myrepo/x`",
+      "replacement": "`.worktrees/myrepo/x`",
+      "rationale": "Claude Code has no editor-managed worktree directory"
+    },
+    {
+      "pattern": "from the user or sidebar",
+      "replacement": "from the user or your own session list",
+      "rationale": "Claude Code has no chat sidebar"
+    },
+    {
+      "pattern": "never hit the sidebar.",
+      "replacement": "never hit the session list.",
+      "rationale": "same sidebar, later in the step"
+    },
+    {
+      "pattern": "`~/Library/Application Support/Cursor` (`state.vscdb.backup`, and `snapshots/roots/<root>` where a `<root>` named for a folder you opened as a workspace balloons)",
+      "replacement": "your editor's application-support caches, `~/.claude/shell-snapshots/` and old `~/.claude/projects/` transcripts (keep the recent ones the **recall** skill and Session pickup read)",
+      "rationale": "Claude Code's own disk use, in place of Cursor's"
+    },
+    {
+      "pattern": "This playbook replaces Cursor's built-in babysit skill for these requests, so do not route there even though its description matches the same words.",
+      "replacement": "This playbook supersedes the bundled **babysit** skill for these requests, so do not route there even though its description matches the same words. `/babysit` stays the standalone entry point outside poteto-mode.",
+      "rationale": "the bundled babysit skill stays reachable by slash command; must precede the built-in babysit rule"
+    },
+    {
+      "pattern": "status comes from `scripts/watch-pr/watch-pr`.",
+      "replacement": "status comes from the watcher at `skills/poteto-mode/scripts/watch-pr/watch-pr` under the installed plugin.",
+      "rationale": "a skill-relative path does not resolve from the working directory"
+    },
+    {
+      "pattern": "Fan out N parallel cloud workers.",
+      "replacement": "Fan out N parallel workers.",
+      "rationale": "Claude Code subagents run on this machine"
+    },
+    {
+      "pattern": "not the cloud concurrency limit.",
+      "replacement": "not the number that run at once.",
+      "rationale": "Claude Code has no cloud concurrency limit"
+    },
+    {
+      "pattern": "`environment: \"cloud\"`, `run_in_background: true`, and the step 4 model, left unset for `auto` or `inherit-parent`. Use `environment: \"local\"` only when the worker needs access to something on the user's computer.",
+      "replacement": "`run_in_background: true`, and the step 4 model, left unset for `auto` or `inherit-parent`. Claude Code subagents all run on this machine, so isolation comes from the worktree or output directory assigned in Phase A, not from a remote environment.",
+      "rationale": "the Agent tool has no environment parameter"
+    },
+    {
+      "pattern": "When a worker must start from a non-default pushed branch, pass `cloud_base_branch`.",
+      "replacement": "When a worker must start from a non-default branch, check that branch out in the worker's own worktree and name the worktree path in its brief.",
+      "rationale": "the Agent tool has no base-branch parameter"
+    },
+    {
+      "pattern": "A local root arms each tick as a real terminal `/loop`. The loop uses a monitored-shell 30-minute sleep and emits an output-notification sentinel. A cloud root uses the existing cloud-sleeper wake chain instead.",
+      "replacement": "Arm each tick as a real `/loop` in dynamic mode, which schedules its own wake-up rather than blocking on a sleep.",
+      "rationale": "Claude Code's /loop schedules its own wake-up; there is no cloud root"
+    },
+    {
+      "pattern": "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-full.md`",
+      "replacement": "re-read this playbook from disk (`skills/poteto-mode/playbooks/autopilot-full.md` under the installed plugin)",
+      "rationale": "the installed plugin, not an upstream checkout, is what the session runs"
+    },
+    {
+      "pattern": "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-stack.md`",
+      "replacement": "re-read this playbook from disk (`skills/poteto-mode/playbooks/autopilot-stack.md` under the installed plugin)",
+      "rationale": "same, for the stack playbook"
+    },
+    {
+      "pattern": "Bugbot or the agentic security review commented",
+      "replacement": "An automated PR-review bot or the agentic security review commented",
+      "rationale": "the port routes any automated PR-review bot, not only Cursor's Bugbot"
+    },
+    {
+      "pattern": "(the `deslop` skill from the `cursor-team-kit` plugin (`/deslop`))",
+      "replacement": "(the **deslop** skill, `/deslop`)",
+      "rationale": "the port ships deslop itself; inside a parenthesis the port avoids nesting a second one; must precede the bare phrase"
+    },
+    {
+      "pattern": "the `deslop` skill from the `cursor-team-kit` plugin (`/deslop`)",
+      "replacement": "the **deslop** skill (`/deslop`)",
+      "rationale": "the port ships deslop itself"
+    },
+    {
+      "pattern": "`/deslop` from `cursor-team-kit`",
+      "replacement": "`/deslop`",
+      "rationale": "same skill, in the PR checklist"
+    },
+    {
+      "pattern": "Cloud-agent PR tools default to draft, so set `draft: false` on every PR creation call.",
+      "replacement": "Some PR tools default to draft, so check every creation call.",
+      "rationale": "Claude Code has no cloud-agent PR tool"
+    },
+    {
+      "pattern": "~/.cursor/rules/pstack-models.mdc",
+      "replacement": "astack-models.md",
+      "rationale": "the per-role override sheet; must precede the generic .cursor/rules/ rule or that rule mangles the path"
+    },
+    {
+      "pattern": "AskQuestion",
+      "replacement": "AskUserQuestion",
+      "rationale": "Claude Code's fixed-choice question tool; upstream Cursor names it AskQuestion"
+    },
+    {
+      "pattern": "the Task tool",
+      "replacement": "the `Agent` tool",
+      "rationale": "Claude Code dispatches subagents with the Agent tool; Cursor calls it Task. The port writes the tool name in backticks"
+    },
+    {
+      "pattern": "`Task`",
+      "replacement": "`Agent`",
+      "rationale": "same tool, backticked; covers `Task` call, `Task` prompts, and the `Task` response body"
+    },
+    {
+      "pattern": "Task subagent",
+      "replacement": "`Agent` subagent",
+      "rationale": "same tool, named bare before the word subagent; the port writes the tool name in backticks"
+    },
+    {
+      "pattern": "control skill",
+      "replacement": "driver skill",
+      "rationale": "driver selection lives in poteto-mode/SKILL.md Non-negotiables; preserve the older generator trigger in its local description"
+    },
+    {
+      "pattern": "restart Cursor",
+      "replacement": "restart Claude Code",
+      "rationale": "the host application"
+    },
+    {
+      "regex": "\\(default `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\)",
+      "files": "^skills/poteto-mode/playbooks/",
+      "replacement": "(default in poteto-mode's Models section)",
+      "rationale": "model defaults live in models.json and are stamped into Models sections, never hard-coded in prose; playbooks belong to poteto-mode"
+    },
+    {
+      "regex": "\\(default `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\)",
+      "files": "/SKILL\\.md$",
+      "replacement": "(default in [Models](#models))",
+      "rationale": "same rule for a skill body, which carries its own Models section"
+    },
+    {
+      "regex": ", default `(?:claude|gpt|grok|gemini|composer)-[^`]+`",
+      "files": "/SKILL\\.md$",
+      "replacement": ", default in [Models](#models)",
+      "rationale": "a role bullet's default model is stamped into the skill's Models section, never hard-coded in prose"
+    },
+    {
+      "pattern": "the `pstack-models.mdc` rule and a default.",
+      "replacement": "`astack-models.md` and a default in [Models](#models).",
+      "rationale": "the override sheet and the stamped defaults a spawn falls back to; must precede the shorter `pstack-models.mdc` rule phrase"
+    },
+    {
+      "pattern": "the `pstack-models.mdc` rule",
+      "replacement": "`astack-models.md`",
+      "rationale": "the override sheet is a file the user includes, not a Cursor rule"
+    },
+    {
+      "pattern": "the rule or that line is missing",
+      "replacement": "the sheet or that line is missing",
+      "rationale": "the override sheet, not a Cursor rule"
+    },
+    {
+      "pattern": "the rule or the line is missing",
+      "replacement": "the sheet or the line is missing",
+      "rationale": "same sentence, the other wording upstream uses"
+    },
+    {
+      "pattern": "Families go by prefix: `claude-*`, `gpt-*`, and `grok-*`.",
+      "replacement": "Families go by model name, such as Opus, Fable, or Sonnet.",
+      "rationale": "Claude Code names models by family, not by slug prefix"
+    },
+    {
+      "pattern": ".cursor/skills/",
+      "replacement": ".claude/skills/",
+      "rationale": "personal skills directory"
+    },
+    {
+      "pattern": ".cursor/rules/",
+      "replacement": "CLAUDE.md imports",
+      "rationale": "Claude Code has no auto-applied rules directory; inclusion is explicit via CLAUDE.md"
+    },
+    {
+      "pattern": "`~/.cursor/projects/*/`",
+      "replacement": "`~/.claude/projects/`",
+      "rationale": "Claude Code keeps every project's transcripts under ~/.claude/projects/"
+    },
+    {
+      "regex": "the active workspace's `agent-transcripts/` directory(?: \\(the system prompt names (?:the|this) path\\))?",
+      "replacement": "Claude Code's per-project transcripts directory at `~/.claude/projects/<encoded-cwd>/`",
+      "rationale": "Cursor's system prompt names its agent-transcripts directory; Claude Code's does not, so the port names the path"
+    },
+    {
+      "pattern": "~/.cursor/plugins/",
+      "replacement": "~/.claude/plugins/",
+      "rationale": "Claude Code installs plugins under ~/.claude/plugins/"
+    },
+    {
+      "pattern": "`generalPurpose`",
+      "replacement": "`general-purpose`",
+      "rationale": "Claude Code's built-in agent type is general-purpose"
+    },
+    {
+      "pattern": "subagent_type: generalPurpose",
+      "replacement": "subagent_type: \"general-purpose\"",
+      "rationale": "the built-in agent type, unbackticked inside a backticked parameter list"
+    },
+    {
+      "pattern": "subagent_type: \"poteto-agent\"",
+      "replacement": "subagent_type: \"astack:poteto-agent\"",
+      "rationale": "plugin agents register under the plugin namespace; the bare name errors (#58)"
+    },
+    {
+      "regex": "Cursor's built-in `create-skill`(?: skill)?",
+      "replacement": "the **plugin-dev:skill-development** skill",
+      "rationale": "Claude Code's skill-authoring guidance ships in the plugin-dev plugin; must precede the bare create-skill rule"
+    },
+    {
+      "pattern": "(Cursor's built-in for authoring SKILL.md files)",
+      "replacement": "(Claude Code's authoring guidance for SKILL.md files)",
+      "rationale": "the parenthetical that follows the skill name"
+    },
+    {
+      "pattern": "create-skill",
+      "replacement": "plugin-dev:skill-development",
+      "rationale": "the same skill, named bare or in backticks"
+    },
+    {
+      "pattern": "Cursor's `/loop` command",
+      "replacement": "Claude Code's `loop` skill",
+      "rationale": "Claude Code ships /loop as a bundled skill"
+    },
+    {
+      "pattern": "a Cursor restart",
+      "replacement": "a session restart",
+      "rationale": "the host application"
+    },
+    {
+      "pattern": "Cursor's built-in babysit skill",
+      "replacement": "the bundled **babysit** skill",
+      "rationale": "Claude Code bundles its own babysit skill with the same trigger words"
+    },
+    {
+      "pattern": "One Cursor cloud agent per PR",
+      "replacement": "One background subagent per PR, in its own worktree,",
+      "rationale": "Claude Code runs subagents locally; a worktree per writer gives the isolation a cloud VM gave"
+    },
+    {
+      "pattern": "arm a `/goal` with the full program objective. The goal continues across turns",
+      "replacement": "write the full program objective into the standing orders and restate it in your todolist. That objective stands across turns",
+      "rationale": "Cursor's /goal has no Claude Code equivalent"
+    },
+    {
+      "pattern": "bugbot comments",
+      "replacement": "review-bot comments",
+      "rationale": "the port routes any automated PR-review bot, not only Cursor's Bugbot"
+    },
+    {
+      "pattern": "skeptical Bugbot triage",
+      "replacement": "skeptical review-bot triage",
+      "rationale": "same routing, in the autopilot owner loop"
+    },
+    {
+      "pattern": "pstack:",
+      "replacement": "astack:",
+      "rationale": "AStack owns the plugin namespace."
+    },
+    {
+      "pattern": "pstack-models.md",
+      "replacement": "astack-models.md",
+      "rationale": "AStack configuration is separate from PStack."
+    },
+    {
+      "pattern": "plugins/pstack",
+      "replacement": "plugins/astack",
+      "rationale": "Maintainer paths refer to the AStack package."
+    }
+  ],
+  "denylist": [
+    {
+      "token": "grok-",
+      "hint": "Cursor model slug; point at the Models section, or add a substitution rule for the phrase"
+    },
+    {
+      "regex": "\\b(?:claude|gpt|gemini|composer)-[0-9a-z.-]*-(?:max|fast|xhigh|high|medium|low|thinking)\\b",
+      "hint": "Cursor model slug with an effort suffix; point at the Models section, or add a substitution rule for the phrase"
+    },
+    {
+      "token": "pstack-models.mdc",
+      "hint": "Cursor's rule file; the port's override sheet is pstack-models.md, at the path setup-pstack lists per runtime"
+    },
+    {
+      "token": "`verify` skill (UIs)",
+      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables"
+    },
+    {
+      "token": "`verify` for UIs",
+      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables"
+    },
+    {
+      "token": "control-cli",
+      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables; rewrite the sentence, don't token-swap"
+    },
+    {
+      "token": "control-ui",
+      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables; rewrite the sentence, don't token-swap"
+    },
+    {
+      "token": "AskQuestion",
+      "hint": "should have been substituted to AskUserQuestion; substitution rule failed to apply"
+    },
+    {
+      "token": ".cursor/",
+      "hint": "Cursor config path survived; map it to the Claude Code equivalent"
+    },
+    {
+      "token": "Cursor cloud agent",
+      "hint": "Claude Code runs subagents locally; the port isolates writers with worktrees"
+    },
+    {
+      "token": "cursor.com",
+      "hint": "Cursor product URL; check whether the sentence applies to Claude Code at all"
+    },
+    {
+      "token": "/goal",
+      "hint": "Cursor's /goal has no Claude Code equivalent; the autopilot playbooks keep the objective in standing orders"
+    },
+    {
+      "token": "create-skill",
+      "hint": "Cursor's built-in skill-authoring skill; Claude Code's equivalent is the plugin-dev:skill-development skill"
+    },
+    {
+      "regex": "\\bTask (?:subagent|tool|schema|`model`)",
+      "hint": "Cursor's subagent tool named bare; Claude Code's is the `Agent` tool. Add a substitution rule for the phrase"
+    },
+    {
+      "token": "generalPurpose",
+      "hint": "Cursor's built-in agent type; Claude Code's is \"general-purpose\""
+    },
+    {
+      "token": "agent-transcripts",
+      "hint": "Cursor's per-workspace transcript directory; Claude Code keeps transcripts under ~/.claude/projects/"
+    },
+    {
+      "token": "environment: \"cloud\"",
+      "hint": "Cursor cloud-agent dispatch; Claude Code runs subagents locally and isolates writers with worktrees"
+    },
+    {
+      "token": "is_background",
+      "hint": "Cursor-only agent frontmatter key; Claude Code sets run_in_background on each Agent call"
+    },
+    {
+      "token": "cloud_base_branch",
+      "hint": "Cursor's cloud-agent base-branch parameter; the port checks the branch out in the worker's worktree"
+    },
+    {
+      "token": "environment: \"local\"",
+      "hint": "Cursor's agent environment parameter; Claude Code subagents all run on this machine"
+    },
+    {
+      "token": "mcps/",
+      "hint": "Cursor's MCP directory; Claude Code lists MCP servers as tools named mcp__<server>__<name>"
+    },
+    {
+      "token": "Application Support/Cursor",
+      "hint": "Cursor's application data; name Claude Code's own caches"
+    },
+    {
+      "token": "cloud-sleeper",
+      "hint": "Cursor's cloud wake chain; Claude Code's /loop schedules its own wake-up"
+    }
+  ]
+}

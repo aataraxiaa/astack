@@ -1,0 +1,33 @@
+{
+  "name": "astack",
+  "version": "0.1.0",
+  "description": "PStack workflows adapted for Claude Code and Codex, with Apple development guidance.",
+  "author": {
+    "name": "AStack contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "astack",
+    "pstack",
+    "claude-code",
+    "codex",
+    "apple",
+    "swift",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/codex-hooks.json",
+  "interface": {
+    "displayName": "AStack",
+    "shortDescription": "PStack workflows for Claude Code, Codex, and Apple development",
+    "developerName": "AStack contributors",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ]
+  },
+  "homepage": "https://github.com/aataraxiaa/astack",
+  "repository": "https://github.com/aataraxiaa/astack"
+}

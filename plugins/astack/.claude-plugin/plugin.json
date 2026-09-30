@@ -1,0 +1,34 @@
+{
+  "name": "astack",
+  "version": "0.1.0",
+  "description": "PStack workflows adapted for Claude Code and Codex, with Apple development guidance.",
+  "author": {
+    "name": "AStack contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "astack",
+    "pstack",
+    "claude-code",
+    "codex",
+    "apple",
+    "swift",
+    "skills"
+  ],
+  "agents": [
+    "./agents/comment-sicko.md",
+    "./agents/poteto-agent.md",
+    "./effort-agents/effort-high.md",
+    "./effort-agents/effort-low.md",
+    "./effort-agents/effort-max.md",
+    "./effort-agents/effort-medium.md",
+    "./effort-agents/effort-xhigh.md",
+    "./effort-agents/poteto-agent-high.md",
+    "./effort-agents/poteto-agent-low.md",
+    "./effort-agents/poteto-agent-max.md",
+    "./effort-agents/poteto-agent-medium.md",
+    "./effort-agents/poteto-agent-xhigh.md"
+  ],
+  "homepage": "https://github.com/aataraxiaa/astack",
+  "repository": "https://github.com/aataraxiaa/astack"
+}

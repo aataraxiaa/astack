@@ -1,0 +1,10 @@
+{
+  "source": "https://github.com/cursor/plugins",
+  "upstreamVersion": "0.15.5",
+  "adaptationReference": {
+    "repository": "https://github.com/michael-denyer/pstack-claude",
+    "commit": "eefcfaf31343a0c98d4bf0dc74a55d62b35ce9f9",
+    "relationship": "One-time attributed source import; not an update or runtime dependency"
+  },
+  "astackRevision": 0
+}
