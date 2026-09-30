@@ -263,6 +263,12 @@
       "why": "Adds a step that applies the human-rulings epistemics, and gives the Direct-claim example a URL the link validator resolves.",
       "since": "0.9.17",
       "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/automate-me/SKILL.md": {
+      "kind": "port-feature",
+      "why": "Normalizes the inherited trailing blank line so the release diff passes git diff --check.",
+      "since": "0.1.0",
+      "upstream": "not-proposed"
     }
   },
   "cursor-team-kit": {

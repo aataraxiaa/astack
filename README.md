@@ -32,7 +32,7 @@ codex plugin add astack@astack
 
 Restart or reload the host as its installation flow requires, review its hook trust prompt, and request the installed `poteto-mode` skill. AStack shares the same skills tree across both harnesses. Do not also install loose copies of these skills or enable PStack's competing routing hook in the same project.
 
-Packaging follows the [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins) and [Claude plugin documentation](https://code.claude.com/docs/en/plugins). Local structural validation does not prove native loading, reload behavior, or model-driven workflows; see [runtime acceptance](docs/runtime-acceptance.md).
+Packaging follows the [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins) and [Claude plugin documentation](https://code.claude.com/docs/en/plugins). The repeatable [native smoke test](docs/runtime-acceptance.md) verifies command and agent registration plus installed skill execution in both harnesses. It does not claim exhaustive workflow or Apple app validation.
 
 ## Apple development
 
@@ -50,6 +50,8 @@ To check original PStack without modifying the checkout:
 ```sh
 bun tools/update-upstream.mjs --check --report-dir "$(~/.agents/bin/agent-task-dir)/review-artifacts/upstream"
 ```
+
+An active local Codex automation checks original PStack every six hours and publishes updates only after validation. It requires this Mac and the authenticated harnesses to be available.
 
 See [the update and automatic release workflow](docs/upstream.md), [adaptation ownership](docs/adaptations.md), and [the skill catalog](docs/reference.md).
 

@@ -35,4 +35,4 @@ Validate workflow changes with actionlint. Inspect workflow permissions and publ
 
 AStack has its own semver in `VERSION`. Add a matching `## <version> - <title>` entry to `CHANGES.md`, regenerate, and pass the checks. Keep the upstream version and immutable commit separate in provenance and pins. Automatic upstream updates increment AStack's patch version; AStack-only changes may bump its version independently.
 
-The automation is opt-in and requires a configured repository, ephemeral validation runner, trusted runtime checker, and release environment. No release should claim that tests ran if only manifests were validated. Publishing details and recovery procedures are in [the upstream workflow](docs/upstream.md).
+Local update automation uses the authenticated harnesses on the maintainer’s Mac. The optional GitHub publisher requires an ephemeral validation runner, trusted runtime checker, and release environment. No release should claim that tests ran if only manifests were validated. Publishing details and recovery procedures are in [the upstream workflow](docs/upstream.md).

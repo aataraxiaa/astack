@@ -26,7 +26,13 @@ The updater uses the inherited three-way sync implementation, with AStack's subs
 
 A failure after a successful sync can leave a partial candidate in the working branch. Inspect that diff; the release pipeline publishes only after all gates succeed. Preserve or discard that candidate explicitly before retrying because apply requires a clean tree. For manual conflict resolution, the lower-level `bun tools/sync.mjs pstack <full-sha>` can produce conflict markers; the generator rejects unresolved markers.
 
-## Automatic releases
+## Active local update automation
+
+The Codex chat automation `maintain-astack-from-original-pstack` checks original PStack every six hours on the maintainer's Mac. It is authorized to adapt, validate, and publish passing AStack updates to the private repository. It stays quiet when unchanged and reports releases or blockers. It uses the authenticated Claude and Codex installations for the native smoke checks; the Mac and those credentials must remain available for local execution.
+
+The automation preserves unrelated work, prepares changes in isolation, checks the exact candidate version in both harnesses, restores the canonical marketplace source after testing, and refuses publication on unresolved conflicts or failed verification. GitHub CI independently runs on pushes. Scheduled monitoring is active; an unseen future upstream update has not yet been exercised end to end.
+
+## Optional GitHub-hosted publication pipeline
 
 `.github/workflows/upstream.yml` polls every six hours and supports a manual run. It has three jobs:
 
@@ -46,7 +52,7 @@ Register an ephemeral runner with `self-hosted`, `macOS`, and `astack-validation
 
 Create the `astack-release` environment. For unattended releases, give the release bot the narrowly required branch permission and leave that environment without mandatory human approval after commissioning. If repository rules require a PR or prohibit the bot's fast-forward, publication stops; do not add a force-push or broad bypass. In that environment, use reviewed updates and release after merge instead.
 
-The private repository is aataraxiaa/astack. Automatic publication remains disabled until the runtime checker, runner, and release environment are commissioned. The checker is intentionally an integration requirement, not a success-returning placeholder.
+This optional GitHub publication path is disabled; the active local automation above performs update work instead. Enable only one publisher. To move publication into GitHub, first commission its runner and checker, then disable the local publisher.
 
 ## Failures and recovery
 
