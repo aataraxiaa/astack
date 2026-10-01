@@ -32,7 +32,7 @@
     },
     "plugins/astack/skills/poteto-mode/SKILL.md": {
       "kind": "policy",
-      "why": "Adds the deploy-platform and defect-severity triggers and the port's principle summaries beside the Claude Code Platform Adaptation section and run-or-verify driver line. AStack routes Apple work to its platform reference and keeps authorization boundaries explicit.",
+      "why": "Adds the deploy-platform and defect-severity triggers and the port's principle summaries beside the Claude Code Platform Adaptation section and run-or-verify driver line. AStack keeps authorization boundaries explicit.",
       "since": "0.9.2",
       "upstream": "not-proposed"
     },

@@ -11,7 +11,7 @@ Do not merge future pstack-claude releases into AStack. Relevant fixes may be re
 The original publisher currently versions PStack in `pstack/.cursor-plugin/plugin.json`, without GitHub releases. `tools/update-upstream.mjs` asks GitHub for the latest commit touching `pstack`, then reads the manifest at that exact commit. It catches a version bump and a same-version correction. It never treats a moving branch name as the source pin.
 
 ```sh
-report_dir="$(~/.agents/bin/agent-task-dir)/review-artifacts/upstream"
+report_dir="${ASTACK_ARTIFACTS_DIR:?Set an external artifacts directory}/upstream"
 bun tools/update-upstream.mjs --check --report-dir "$report_dir"
 ```
 
@@ -26,11 +26,11 @@ The updater uses the inherited three-way sync implementation, with AStack's subs
 
 A failure after a successful sync can leave a partial candidate in the working branch. Inspect that diff; the release pipeline publishes only after all gates succeed. Preserve or discard that candidate explicitly before retrying because apply requires a clean tree. For manual conflict resolution, the lower-level `bun tools/sync.mjs pstack <full-sha>` can produce conflict markers; the generator rejects unresolved markers.
 
-## Active local update automation
+## Portable scheduled maintenance
 
-The Codex chat automation `maintain-astack-from-original-pstack` checks original PStack every six hours on the maintainer's Mac. It is authorized to adapt, validate, and publish passing AStack updates to the private repository. It stays quiet when unchanged and reports releases or blockers. It uses the authenticated Claude and Codex installations for the native smoke checks; the Mac and those credentials must remain available for local execution.
+Use [maintenance setup](maintenance.md) to commission a scheduled agent on a host with authenticated Claude Code, Codex, and GitHub access. The [scheduler prompt](maintenance-prompt.md) points the agent at the same committed runbook on every run. Scheduling, credentials, checkout paths, and publication authorization are host settings outside this repository.
 
-The automation preserves unrelated work, prepares changes in isolation, checks the exact candidate version in both harnesses, restores the canonical marketplace source after testing, and refuses publication on unresolved conflicts or failed verification. GitHub CI independently runs on pushes. Scheduled monitoring is active; an unseen future upstream update has not yet been exercised end to end.
+A six-hour interval is a suggested starting point. Run one publisher per repository. The plugin itself neither installs nor enables a scheduler. See [the diagrams](workflow.md) for the source chain and release gates.
 
 ## Optional GitHub-hosted publication pipeline
 
@@ -52,7 +52,7 @@ Register an ephemeral runner with `self-hosted`, `macOS`, and `astack-validation
 
 Create the `astack-release` environment. For unattended releases, give the release bot the narrowly required branch permission and leave that environment without mandatory human approval after commissioning. If repository rules require a PR or prohibit the bot's fast-forward, publication stops; do not add a force-push or broad bypass. In that environment, use reviewed updates and release after merge instead.
 
-This optional GitHub publication path is disabled; the active local automation above performs update work instead. Enable only one publisher. To move publication into GitHub, first commission its runner and checker, then disable the local publisher.
+The GitHub publication path is opt-in. Inspect repository variables to determine its current state. Enable only one publisher. To move publication into GitHub, first commission its runner and checker, then disable the previous publisher.
 
 ## Failures and recovery
 

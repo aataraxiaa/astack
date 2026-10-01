@@ -7,7 +7,7 @@ The maintained source is original PStack in cursor/plugins. The initial translat
 | Original workflows | `tools/upstream.json` | Fetch original source at an immutable commit and compare with the previous pin. |
 | Mechanical translation | `tools/substitutions.json` | Apply named rewrites to both old and new source before three-way comparison. |
 | Deliberate divergence | `tools/forks.json` | Preserve non-overlapping edits; fail validation on conflicts or undeclared differences. |
-| Apple guidance | `plugins/astack/skills/poteto-mode/references/apple-development.md` | AStack owns this file; the main workflow and session hook route Apple work to it. |
+| Maintenance instructions | `docs/maintenance.md`, `docs/maintenance-prompt.md`, `docs/workflow.md` | AStack owns the portable runbook, scheduler prompt, and diagrams. Host settings and credentials stay outside Git. |
 | Native packaging | Harness manifests, marketplaces, hooks, `tools/generate.mjs` | Share one skills tree and validate each harness's packaging. |
 | Release identity | `VERSION`, `CHANGES.md`, `tools/provenance.json` | AStack uses its own semver and records the upstream version and commit separately. |
 
@@ -15,6 +15,6 @@ The bootstrap retains the port reference's declared policy forks as well as its 
 
 AStack uses the `astack:` plugin namespace and `astack-models.md` configuration. The upstream `poteto-mode` and `setup-pstack` skill names are retained to minimize path churn. Thus Claude invokes `/astack:poteto-mode` and `/astack:setup-pstack`.
 
-The Codex adapter uses available tools and model capabilities rather than assuming that every Codex surface exposes the same tool names. The Apple policy takes precedence over generic app-driving examples for Apple work. User and project instructions take precedence over all plugin guidance.
+The Codex adapter uses available tools and model capabilities rather than assuming that every Codex surface exposes the same tool names. User and project instructions take precedence over all plugin guidance.
 
-New functionality should be placed in the smallest applicable layer. A new Apple requirement usually needs a change to the Apple reference, not copies of every workflow. When fixing a portability defect, add a behavioral fixture to the existing tests and make the translation reproducible.
+New functionality should be placed in the smallest applicable layer. Platform-specific preferences belong in the consuming project’s instructions. When fixing a portability defect, add a behavioral fixture to the existing tests and make the translation reproducible.

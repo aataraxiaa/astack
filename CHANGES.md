@@ -1,5 +1,9 @@
 # AStack changes
 
+## 0.1.1 - Portable maintenance
+
+Remove the AStack-specific Apple policy and routing. Add portable maintenance instructions, a reusable scheduler prompt, workflow diagrams, and publication privacy guidance. Remove host-specific setup and repository-owner identity from current packaging and documentation. Upstream source pins and attribution are unchanged.
+
 ## 0.1.0 - Initial AStack adaptation
 
 Initial AStack adaptation of original PStack 0.15.5 at 12d587dfb20741cafc376c42c696c5f6e2a64487. Claude Code and Codex portability code is bootstrapped from pstack-claude eefcfaf31343a0c98d4bf0dc74a55d62b35ce9f9, with its notices retained. Future updates track cursor/plugins directly. Adds Apple guidance and separate AStack configuration.

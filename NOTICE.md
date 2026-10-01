@@ -1,6 +1,6 @@
 # AStack attribution
 
-AStack adapts original PStack by Lauren Tan for Claude Code and Codex. Its initial portability code and tests were imported from Michael Denyer’s MIT-licensed pstack-claude at eefcfaf31343a0c98d4bf0dc74a55d62b35ce9f9. This is a one-time source import, not an update dependency. AStack modifications include packaging identity, Apple guidance, Codex capability mapping, and direct-upstream release tooling.
+AStack adapts original PStack by Lauren Tan for Claude Code and Codex. Its initial portability code and tests were imported from Michael Denyer’s MIT-licensed pstack-claude at eefcfaf31343a0c98d4bf0dc74a55d62b35ce9f9. This is a one-time source import, not an update dependency. AStack modifications include packaging identity, Codex capability mapping, and direct-upstream release tooling.
 
 The original source pins are in tools/upstream.json. The following historical port notice is retained for attribution; references to that port’s release history describe the imported baseline.
 

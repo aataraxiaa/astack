@@ -8,4 +8,4 @@ AStack follows original PStack in `https://github.com/cursor/plugins` directly. 
 - Preserve licenses and attribution. Never rewrite an upstream source identity into an AStack URL.
 - Run `bun tools/generate.mjs`, then `bun test tests/`. Script changes also require the package's frozen install, typecheck, and tests, as described in CONTRIBUTING.md.
 - Do not publish from unresolved merges or claim native runtime validation from structural checks. Automatic publishing requires the release environment and its runtime checks.
-- Save handoff state outside the repository in the directory returned by `~/.agents/bin/agent-task-dir`, under `review-artifacts/resume.md`.
+- Follow `docs/maintenance.md` for scheduled updates. Keep host settings and evidence outside Git. Set `ASTACK_ARTIFACTS_DIR` to an external directory and save handoff state in its `resume.md`. A host artifact-directory helper is optional, never a repository dependency.

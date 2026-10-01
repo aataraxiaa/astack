@@ -11,7 +11,5 @@ It routes to the right AStack skill from there. For smaller tasks, such as a con
 
 When the intent is already specific, enter that skill directly: `astack:tdd`, `astack:architect`, `astack:how`, `astack:why`, `astack:arena`, `astack:interrogate`.
 
-For Apple platform tasks, read the Apple development reference linked from poteto-mode before selecting tools or verification.
-
 User instructions (CLAUDE.md, AGENTS.md, direct requests) take precedence. Other session-start mandates, such as superpowers, still apply. Their skill checks run as before, and when a task meets the criteria above they route implementation through poteto-mode.
 </EXTREMELY_IMPORTANT>

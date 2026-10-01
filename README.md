@@ -1,19 +1,19 @@
 # AStack
 
-PStack workflows for Claude Code and Codex, with Apple software development guidance.
+PStack workflows for Claude Code and Codex.
 
 AStack starts from the working Claude/Codex adaptation in [pstack-claude](https://github.com/michael-denyer/pstack-claude), then maintains its own adaptations directly against [Lauren Tan's original PStack](https://github.com/cursor/plugins/tree/main/pstack). The port is an attributed bootstrap, not an ongoing dependency. Exact source revisions are recorded in [upstream pins](tools/upstream.json) and [provenance](tools/provenance.json).
 
 ## Install
 
-AStack is distributed from the private [aataraxiaa/astack repository](https://github.com/aataraxiaa/astack). Authenticate Git with a GitHub account that has access before installing.
+Replace `OWNER/REPOSITORY` below with the GitHub repository that distributes your AStack copy. For a private repository, authenticate Git with an account that has access. The marketplace and plugin are both named `astack`, regardless of the repository owner.
 
 ### Claude Code
 
 Run in Claude Code:
 
 ```text
-/plugin marketplace add aataraxiaa/astack
+/plugin marketplace add OWNER/REPOSITORY
 /plugin install astack@astack
 ```
 
@@ -26,17 +26,13 @@ Use `/astack:poteto-mode` for the main workflow and `/astack:setup-pstack` for m
 Run in a terminal:
 
 ```sh
-codex plugin marketplace add aataraxiaa/astack
+codex plugin marketplace add OWNER/REPOSITORY
 codex plugin add astack@astack
 ```
 
 Restart or reload the host as its installation flow requires, review its hook trust prompt, and request the installed `poteto-mode` skill. AStack shares the same skills tree across both harnesses. Do not also install loose copies of these skills or enable PStack's competing routing hook in the same project.
 
-Packaging follows the [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins) and [Claude plugin documentation](https://code.claude.com/docs/en/plugins). The repeatable [native smoke test](docs/runtime-acceptance.md) verifies command and agent registration plus installed skill execution in both harnesses. It does not claim exhaustive workflow or Apple app validation.
-
-## Apple development
-
-The main workflow loads [Apple development guidance](plugins/astack/skills/poteto-mode/references/apple-development.md) for Swift and Apple platform work. It uses the project's conventions and design system, XcodeBuildMCP for Xcode and simulator work, relevant behavioral tests, and light/dark UI evidence. Missing runtime validation must be reported explicitly.
+Packaging follows the [OpenAI plugin documentation](https://developers.openai.com/plugins/build/plugins) and [Claude plugin documentation](https://code.claude.com/docs/en/plugins). The repeatable [native smoke test](docs/runtime-acceptance.md) verifies command and agent registration plus installed skill execution in both harnesses. It does not claim exhaustive workflow validation.
 
 ## Develop and update
 
@@ -48,10 +44,11 @@ bash tools/check.sh
 To check original PStack without modifying the checkout:
 
 ```sh
-bun tools/update-upstream.mjs --check --report-dir "$(~/.agents/bin/agent-task-dir)/review-artifacts/upstream"
+export ASTACK_ARTIFACTS_DIR="$(mktemp -d)"
+bun tools/update-upstream.mjs --check --report-dir "$ASTACK_ARTIFACTS_DIR/upstream"
 ```
 
-An active local Codex automation checks original PStack every six hours and publishes updates only after validation. It requires this Mac and the authenticated harnesses to be available.
+Installing the plugin does not create a scheduler. Use the [portable maintenance setup](docs/maintenance.md) and [committed scheduler prompt](docs/maintenance-prompt.md) on your chosen host. The [workflow diagrams](docs/workflow.md) explain source ownership, updates, and daily use. Before making an existing fork public, follow the [publication privacy checklist](docs/publication.md).
 
 See [the update and automatic release workflow](docs/upstream.md), [adaptation ownership](docs/adaptations.md), and [the skill catalog](docs/reference.md).
 

@@ -7,7 +7,7 @@ description: poteto's agent style for concise, detailed responses, deliberate su
 
 ## AStack policy
 
-For Apple platform work, read [Apple development](references/apple-development.md) before choosing tools, implementation, or validation. It governs Apple-specific steps in the playbooks. User authorization and project instructions govern delegation, external writes, and publication; a playbook never grants additional permission. Use only tools and models available in the active harness.
+User authorization and project instructions govern delegation, external writes, and publication; a playbook never grants additional permission. Use only tools and models available in the active harness.
 
 ## Platform Adaptation
 

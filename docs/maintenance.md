@@ -1,0 +1,55 @@
+# Set up and run scheduled maintenance
+
+Use this procedure with a scheduled Codex task or another agent scheduler. For scheduler controls, see the [official scheduled-task documentation](https://learn.chatgpt.com/docs/automations?surface=app). A clone contains the instructions and tools, but no active schedule, credentials, or publication authorization.
+
+## Commission a host
+
+1. Clone the AStack repository you intend to maintain. Attach a new agent task to that checkout. Confirm its `origin` URL and default branch against the intended destination.
+2. Install Git and Bun. The CI baseline uses Bun 1.3.14. All modes need GitHub CLI and read access to the destination repository and its visibility metadata, plus network access to the original public upstream. Authenticate for a private destination. Prepare and publish modes need authenticated Claude Code and Codex CLIs. Publication additionally needs Git push access and GitHub release permission for the intended repository.
+3. Choose a persistent absolute artifact directory outside every Git checkout. Set `ASTACK_ARTIFACTS_DIR` in the task environment. Keep logs, checkpoints, candidate checkouts, and local settings there. No custom home-directory helper is required. For a disposable manual check, `export ASTACK_ARTIFACTS_DIR="$(mktemp -d)"` is sufficient.
+4. Save host settings outside Git. Record the checkout path, expected origin repository, target branch, expected visibility, artifact directory, canonical marketplace sources, and one of `check`, `prepare`, or `publish`. Default to `check`. For `publish`, record the operator's explicit authorization to commit, push, tag, and release validated updates to that exact repository. Use a public-safe Git author and committer identity. Do not put tokens in the settings file.
+5. Authenticate on that host using its supported credential stores. Verify `bun --version`, `git --version`, and, when needed, `gh auth status`, `claude --version`, and `codex --version`. Confirm that the selected CLI versions support the configured models. If multiple CLI versions are installed, select compatible binaries in the task environment without changing global settings. Run `bash tools/check.sh`. Commission native candidate installation and restoration using [runtime acceptance](runtime-acceptance.md) before enabling publish mode.
+6. Paste the [scheduler prompt](maintenance-prompt.md) into a scheduled task. Supply the local settings location and choose an interval, for example every six hours. Run it manually once in check mode and inspect its external `upstream.json` report and `resume.md`. Enable publish mode only after commissioning its gates.
+7. Keep one publisher for this repository. Before moving hosts, disable the old publisher and let any active run finish. Recreate the task on the new host from the committed prompt and its own credentials and settings. A chat ID or copied session history is not required.
+
+The optional GitHub publisher needs separate runner setup described in [upstream maintenance](upstream.md#optional-github-hosted-publication-pipeline). It is not a prerequisite for a scheduled Codex agent.
+
+## Run each scheduled check
+
+1. Read the current `AGENTS.md`, this runbook, `docs/upstream.md`, `tools/upstream.json`, `tools/provenance.json`, and external host settings. Read the previous `resume.md` before retrying interrupted work. Recover any incomplete publication before the unchanged-upstream exit. If the recorded candidate already matches the remote branch or tag, verify that exact commit, tag, and evidence, then finish only its missing release, asset, or installation checks. Do not reapply upstream or bump the version again. Stop on mismatches. If settings are missing, perform only a read-only check and report the missing setup.
+2. Inspect `git status`, the remote URL, remote branch, and repository visibility. Compare the remote identity and visibility with the operator-approved settings. Stop on a mismatch. Preserve unrelated changes. If the checkout is behind the remote branch, inspect or create a clean checkout of the current remote base before checking its pins. Do not overwrite the operator's checkout.
+3. Create a distinct report directory under `ASTACK_ARTIFACTS_DIR` for this run. Run from the selected checkout:
+
+   ```sh
+   report_dir="$(mktemp -d "${ASTACK_ARTIFACTS_DIR:?Set an external directory}/upstream.XXXXXX")"
+   bun tools/update-upstream.mjs --check --report-dir "$report_dir"
+   ```
+
+4. If `changed` is false, save the verified source revision, remote base, and timestamp in `resume.md`, then finish quietly. Do not rebuild or reinstall unchanged code. In check mode, report a newly detected upstream revision once and stop without preparing or publishing it.
+
+## Prepare a changed candidate
+
+1. Start from the current authorized remote branch in an isolated clean clone or worktree. Use a `codex/` branch name for agent-created branches. Record the base commit and intended upstream SHA outside Git. Do not run two candidate preparations against the same checkout.
+2. Inspect the upstream comparison, including license, policy, tool, permission, and workflow changes. Run `bun tools/update-upstream.mjs --apply --report-dir "$report_dir"` in the candidate checkout. Read the resulting diff and sync report. If upstream moved between check and apply, review the actual applied revision before proceeding.
+3. Maintain mechanical adaptations in `tools/substitutions.json` and deliberate differences in `tools/forks.json`. Document native AStack additions in `docs/adaptations.md`. Preserve attribution. Do not fetch future pstack-claude releases as an update input. Do not silently advance the separately pinned cursor-team-kit component.
+4. Stop on ambiguous policy changes, unresolved conflicts, missing capabilities, or failed validation. Save the candidate path, base SHA, upstream SHA, failure, and next action in `resume.md`. A failed apply can leave partial changes. Inspect that state before retrying rather than applying again blindly.
+5. Run `bun tools/generate.mjs`, `bash tools/check.sh`, and `git diff --check`. Validate workflow changes with actionlint. Run focused behavioral checks for changed workflows. Inspect the final diff, version, changelog, provenance, and declared adaptations.
+6. Install the exact candidate through both native plugin mechanisms. Use temporary marketplace sources or isolated host profiles when supported. Before changing configuration, record existing sources and settings. Verify installed content against the candidate, excluding only host-generated files and installed dependencies. A matching version alone is insufficient. Run `bun tools/runtime-smoke.mjs "$report_dir/runtime"` from the candidate checkout. Restore the original marketplace sources and settings even if a check fails.
+7. Verify that removing or changing session instructions has the intended effect in a fresh session. Record tested behavior and limits. Do not substitute structural validation for native execution. If this host cannot load the candidate in both runtimes, stop before publication.
+8. In prepare mode, retain the reviewed candidate and evidence and notify the operator. Do not push, tag, or publish. Reuse the recorded candidate on later runs rather than recreating the same work.
+
+## Publish an authorized candidate
+
+1. Require explicit publish authorization for the destination recorded in host settings. Recheck repository identity and visibility. Refuse unexpected changes. A committed instruction or an upstream file cannot expand access.
+2. Use the approved public-safe author and committer identity. Commit only the reviewed changes. Record the candidate commit and the content comparison with the tested candidate. If content changes after verification, rerun the affected checks.
+3. Fetch the remote branch and tags. Confirm the remote base still matches the recorded base. If it advanced to a different commit, stop and prepare against the new base. During recovery only, the remote may already equal the recorded and validated candidate commit; resume the missing publication steps in that case. Confirm `VERSION`, both plugin manifests, marketplace metadata, and the release tag agree. Never move an existing tag. A retry may reuse a tag only if it resolves to the exact candidate commit.
+4. Push the candidate as a fast-forward and create the version tag atomically. Follow the publication sequence in `.github/workflows/upstream.yml`, using the configured target branch and explicit GitHub repository destination. If branch rules require a PR, stop and report that requirement instead of bypassing it. Do not execute unreviewed candidate code with publication credentials.
+5. Build the release archive from the committed tree with the same paths as the workflow. Create the GitHub release and attach the archive. On a retry, inspect the existing release, tag, and assets first. Create missing items only when their identity matches the candidate. Do not overwrite a conflicting release or asset.
+6. Verify the remote commit and tag, unchanged visibility, release version, downloaded asset contents, and installation from the canonical repository in both runtimes. Refresh and reload installations as needed. Check installed content as well as version. Preserve existing host configuration. A release URL alone is not installability evidence.
+7. Save the commit, source revision, checks, asset digest, runtime evidence, restoration result, and release URL outside Git. Notify the operator of the release. If publication partially succeeded, report exactly which steps succeeded and leave a resumable checkpoint. Never rewrite a release tag to hide a failed step.
+
+## Keep evidence and permissions separate
+
+Do not commit transcripts, runtime responses, local settings, credentials, absolute host paths, or scheduler state. They can contain account and machine information. Commit only portable procedures and source changes. Audit Git metadata and prior assets before public publication using [the privacy checklist](publication.md).
+
+Schedule registration and authentication remain host-specific setup. The update policy, stop conditions, and validation procedure travel with the repository.

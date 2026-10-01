@@ -2,7 +2,7 @@
 
 ## The sync boundary
 
-Read [adaptation ownership](docs/adaptations.md) and [the upstream workflow](docs/upstream.md). Original PStack owns the baseline workflows. AStack owns translations and declared policy differences, including Apple guidance. The port reference is a one-time source import.
+Read [adaptation ownership](docs/adaptations.md) and [the upstream workflow](docs/upstream.md). Original PStack owns the baseline workflows. AStack owns translations and declared policy differences. The port reference is a one-time source import.
 
 Use `tools/substitutions.json` for reproducible rewrites. Declare deliberate upstream-file changes in `tools/forks.json`, with a concrete reason. The sync tool derives old and new original source through the same transformations, then performs a three-way merge. It rejects undeclared divergence, unsupported Cursor constructs, and binary conflicts. Automatic mode also refuses all text, symlink, and deletion conflicts without writing.
 
@@ -35,4 +35,4 @@ Validate workflow changes with actionlint. Inspect workflow permissions and publ
 
 AStack has its own semver in `VERSION`. Add a matching `## <version> - <title>` entry to `CHANGES.md`, regenerate, and pass the checks. Keep the upstream version and immutable commit separate in provenance and pins. Automatic upstream updates increment AStack's patch version; AStack-only changes may bump its version independently.
 
-Local update automation uses the authenticated harnesses on the maintainer’s Mac. The optional GitHub publisher requires an ephemeral validation runner, trusted runtime checker, and release environment. No release should claim that tests ran if only manifests were validated. Publishing details and recovery procedures are in [the upstream workflow](docs/upstream.md).
+Set up scheduled updates using the portable [maintenance runbook](docs/maintenance.md) and authenticated Claude Code and Codex installations. The optional GitHub publisher requires an ephemeral validation runner, trusted runtime checker, and release environment. No release should claim that tests ran if only manifests were validated. Publishing details and recovery procedures are in [the upstream workflow](docs/upstream.md).

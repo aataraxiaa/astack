@@ -24,8 +24,6 @@ Claude-specific subagent types and run_in_background parameters do not transfer 
 
 When no-comments requests the comment-sicko reviewer, tell the Codex worker to read `poteto-mode/references/agents/comment-sicko.md` in full first. This portable reference replaces the Claude-specific agent type.
 
-For Apple work use [Apple development](apple-development.md), including the XcodeBuildMCP requirement and explicit reporting of unavailable validation.
-
 ## Model names
 
 Skills name Claude defaults (a single-role default for code/prose/judgment plus a diverse-model panel for diverse-model panels; each model-consuming skill lists its own in a Models section). These slugs do not resolve on Codex. Substitute your configured Codex models:

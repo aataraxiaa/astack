@@ -58,7 +58,7 @@ Both manifests use the SessionStart hook. Review hook trust in the host. To disa
 
 Use [setup-pstack](../plugins/astack/skills/setup-pstack/SKILL.md) to select available models. Defaults are in [models.json](../plugins/astack/models.json). A workflow cannot enable unavailable capabilities or extend user authorization.
 
-Bun is needed for bundled scripts. GitHub workflows need authenticated `gh`; some inherited stack workflows use Graphite. Apple build and simulator workflows need XcodeBuildMCP, configured in the consuming harness. AStack does not install tools or change global settings implicitly.
+Bun is needed for bundled scripts. GitHub workflows need authenticated `gh`; some inherited stack workflows use Graphite. AStack does not install tools or change global settings implicitly.
 
 ## Maintenance
 
