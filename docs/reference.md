@@ -4,7 +4,7 @@ Start with the [README](../README.md).
 
 ## Slash commands
 
-The package includes 54 skill directories: 31 public skills and 23 `principle-*` references. Claude Code uses `/astack:<name>`. In Codex, request a skill by name or install the [optional shortcuts](#codex) for the `/name` form below.
+The package includes 56 skill directories: 32 public skills and 24 `principle-*` references. Claude Code uses `/astack:<name>`. In Codex, request a skill by name or install the [optional shortcuts](#codex) for the `/name` form below.
 
 Find each skill's instructions in the [skills tree](../plugins/astack/skills/).
 
@@ -23,6 +23,7 @@ Find each skill's instructions in the [skills tree](../plugins/astack/skills/).
 | `/teach` | explain a subsystem plainly by composing how + why |
 | `/swarm` | fan out N parallel workers across slices or races, then return one aggregated report |
 | `/technical-writing` | write docs, RFCs, readmes, PR descriptions, and commit messages to one layered standard |
+| `/benchmark-checklist` | vet measurements before reporting a speedup or choosing an option |
 | `/bro` | restate the last message in plain human language, no jargon |
 | `/figure-it-out` | design a rigorous, auditable playbook for a task no bundled playbook fits |
 | `/show-me-your-work` | log decisions to a reviewable tsv decision trail |
@@ -64,6 +65,6 @@ Bun is needed for bundled scripts. GitHub workflows need authenticated `gh`; som
 
 See [upstream workflow](upstream.md), [adaptations](adaptations.md), and [CONTRIBUTING](../CONTRIBUTING.md). The command table above is the generator's source for Codex prompt descriptions; maintain one row per public skill.
 
-The skill tree is synced against upstream `12d587d` (v0.15.5). The machine-readable pin in `tools/upstream.json` is authoritative. The update tool keeps this sentence current.
+The skill tree is synced against upstream `23e4138daa01c42d4969f7a5465f82704e64f798` (v0.15.6). The machine-readable pin in `tools/upstream.json` is authoritative. The update tool keeps this sentence current.
 
 See [NOTICE](../NOTICE.md) and [LICENSE](../LICENSE) for attribution.

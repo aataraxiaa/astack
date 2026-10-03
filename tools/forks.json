@@ -32,7 +32,7 @@
     },
     "plugins/astack/skills/poteto-mode/SKILL.md": {
       "kind": "policy",
-      "why": "Adds the deploy-platform and defect-severity triggers and the port's principle summaries beside the Claude Code Platform Adaptation section and run-or-verify driver line. AStack keeps authorization boundaries explicit.",
+      "why": "Adds the deploy-platform and defect-severity triggers and the port's principle summaries beside the Claude Code Platform Adaptation section and run-or-verify driver line. AStack keeps authorization boundaries explicit. Replacements must confirm existing writers stopped or isolate their mutable state.",
       "since": "0.9.2",
       "upstream": "not-proposed"
     },
@@ -68,7 +68,7 @@
     },
     "plugins/astack/skills/poteto-mode/playbooks/multi-phase-plan.md": {
       "kind": "port-feature",
-      "why": "Plans read skills from the installed plugin, keep the store under ~/.claude/orchestrate, and write the goal into standing orders because Claude Code has no /goal, and they leave rebase and merge authority to the execution playbook.",
+      "why": "Plans read skills from the installed plugin, keep the store under ~/.claude/orchestrate, and leave rebase and merge authority to the execution playbook.",
       "since": "0.9.19",
       "upstream": "not-proposed"
     },
@@ -110,7 +110,7 @@
     },
     "plugins/astack/skills/poteto-mode/scripts/check-plan.mjs": {
       "kind": "port-feature",
-      "why": "Checks for the port's plan skeleton markers (standing orders, installed-plugin reads, the configured swarm workers model) and tracks code fences by delimiter character and length.",
+      "why": "Checks the adapted plan skeleton markers (installed-plugin reads, hourly audit, configured swarm workers model) and tracks code fences by delimiter character and length.",
       "since": "0.9.19",
       "upstream": "not-proposed"
     },

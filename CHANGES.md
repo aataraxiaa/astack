@@ -1,5 +1,9 @@
 # AStack changes
 
+## 0.1.2 - Original PStack 0.15.6
+
+Adapted original cursor/plugins/pstack at 23e4138daa01c42d4969f7a5465f82704e64f798. Adds benchmark-checklist and Explain the Number, fresh-agent handoffs, hourly audit scheduling, and updated PR and performance guidance. Preserves operator-controlled merges and installed-plugin reads. Explicit driver and host-command substitutions keep the adaptation portable across Claude Code and Codex. No upstream files became port-only.
+
 ## 0.1.1 - Portable maintenance
 
 Remove the AStack-specific Apple policy and routing. Add portable maintenance instructions, a reusable scheduler prompt, workflow diagrams, and publication privacy guidance. Remove host-specific setup and repository-owner identity from current packaging and documentation. Upstream source pins and attribution are unchanged.

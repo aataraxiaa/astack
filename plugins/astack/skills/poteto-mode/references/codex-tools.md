@@ -49,7 +49,7 @@ The [driver policy](../SKILL.md#non-negotiables) selects the app driver. For ski
 | `run` (drive a CLI/TUI to see a change work) | Run the app yourself via `shell` and observe the real output. |
 | Project UI driver | Drive the UI with whatever automation you have, or hand the user a concrete manual check. Do not claim done without observing the artifact. |
 | `plugin-dev:skill-development` (Claude's SKILL.md authoring guidance) | Follow your platform's skill-authoring guidance; the `writing-skills` skill if present. Keep `name` + `description` frontmatter and progressive disclosure. |
-| `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. Re-run the step yourself on a cadence, or use a Codex scheduled task if available. |
+| `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. For durable audits such as `/loop 1h`, use an available scheduled task with the requested cadence and authorization. Reuse an existing schedule when it already covers the work. If scheduling is unavailable, report that the audit is not armed. An active-session wait can support a bounded check but cannot replace a durable schedule. |
 
 ## Per-skill notes
 

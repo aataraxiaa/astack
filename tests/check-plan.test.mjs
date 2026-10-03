@@ -42,6 +42,12 @@ describe("plan checklists", () => {
     });
   });
 
+  test("a stale audit cadence is rejected", () => {
+    const result = run(skeleton.replaceAll("/loop 1h", "/loop 30m"));
+    expect(result.code).toBe(1);
+    expect(result.out).toContain('Program checklist lacks "/loop 1h"');
+  });
+
   test("completed boxes remain valid", () => {
     expect(run(skeleton.replaceAll("- [ ]", "- [x]")).code).toBe(0);
   });

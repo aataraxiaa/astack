@@ -131,6 +131,11 @@ describe("applySubstitutions", () => {
   // One upstream sentence per rule that reaches more than one upstream file,
   // and the one form the port writes for it.
   test.each([
+    ["skills/poteto-mode/playbooks/opening-a-pr.md", "A built-in PR tool can default to draft, so set `draft: false` on every creation call through it.", "A built-in PR tool can default to draft. Use its exposed schema to request a ready PR, setting `draft: false` when that field exists."],
+    ["skills/poteto-mode/playbooks/autopilot-full.md", "`/loop` works in local and cloud roots.", "On Claude Code, use the available `/loop` scheduler. On Codex, use an available scheduled task through the Codex mapping. If neither provides a durable wake-up, report the missing capability instead of claiming the audit is armed."],
+    ["skills/benchmark-checklist/SKILL.md", "the core count with `nproc`", "the core count with an available host command (`nproc` on Linux or `sysctl -n hw.logicalcpu` on macOS)"],
+    ["skills/poteto-mode/SKILL.md", "- Shipping UI / IDE / CLI → the matching control skill. `cursor-team-kit` publishes `control-cli` (CLIs and TUIs) and `control-ui` (browser / Electron / web UIs). For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.", "- Shipping UI / IDE / CLI → the driver skill. `run` ships with Claude Code and the model can invoke it for CLIs, TUIs, servers, and browser or Electron apps. The bundled `verify` runs only when the user types `/verify`, so for UIs use the project `verify` skill at `.claude/skills/verify/` (generate it with `/create-verification-skill`) and fall back to `run` when the repo has none. For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception."],
+    ["skills/poteto-mode/playbooks/autopilot-full.md", "with the matching control skill, such as `control-cli` or `control-ui` from `cursor-team-kit`, or a named driver where none exists", "with the driver selected through poteto-mode's Non-negotiables, or a named available driver where none exists"],
     [
       "skills/how/SKILL.md",
       "Each spawn below names a role line in the `pstack-models.mdc` rule and a default. Set `model` to that line's value, or to the default if the rule or the line is missing.",

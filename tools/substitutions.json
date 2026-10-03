@@ -1,6 +1,31 @@
 {
   "substitutions": [
     {
+      "pattern": "A built-in PR tool can default to draft, so set `draft: false` on every creation call through it.",
+      "replacement": "A built-in PR tool can default to draft. Use its exposed schema to request a ready PR, setting `draft: false` when that field exists.",
+      "rationale": "PR tools differ across harnesses; require ready status without inventing an unsupported parameter."
+    },
+    {
+      "pattern": "`/loop` works in local and cloud roots.",
+      "replacement": "On Claude Code, use the available `/loop` scheduler. On Codex, use an available scheduled task through the Codex mapping. If neither provides a durable wake-up, report the missing capability instead of claiming the audit is armed.",
+      "rationale": "Map hourly audits to actual host schedulers; local sleep is not a durable wake-up."
+    },
+    {
+      "pattern": "the core count with `nproc`",
+      "replacement": "the core count with an available host command (`nproc` on Linux or `sysctl -n hw.logicalcpu` on macOS)",
+      "rationale": "Benchmark preparation must work on supported hosts without a Linux-only utility."
+    },
+    {
+      "pattern": "- Shipping UI / IDE / CLI → the matching control skill. `cursor-team-kit` publishes `control-cli` (CLIs and TUIs) and `control-ui` (browser / Electron / web UIs). For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.",
+      "replacement": "- Shipping UI / IDE / CLI → the driver skill. `run` ships with Claude Code and the model can invoke it for CLIs, TUIs, servers, and browser or Electron apps. The bundled `verify` runs only when the user types `/verify`, so for UIs use the project `verify` skill at `.claude/skills/verify/` (generate it with `/create-verification-skill`) and fall back to `run` when the repo has none. For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.",
+      "rationale": "Resolve surface drivers through the Claude Code and Codex portability policy instead of unavailable Cursor control plugins."
+    },
+    {
+      "pattern": "with the matching control skill, such as `control-cli` or `control-ui` from `cursor-team-kit`, or a named driver where none exists",
+      "replacement": "with the driver selected through poteto-mode's Non-negotiables, or a named available driver where none exists",
+      "rationale": "Keep live verification while resolving drivers available in the active harness."
+    },
+    {
       "pattern": "The system prompt names the workspace's `agent-transcripts/` directory.",
       "replacement": "Claude Code stores them at `~/.claude/projects/<encoded-cwd>/*.jsonl`, where `<encoded-cwd>` is the workspace's working directory with `/` \u2192 `-`.",
       "rationale": "Claude Code's system prompt does not name a transcripts directory, so the port names the path and its encoding"

@@ -4,7 +4,7 @@
     "pstack": {
       "upstreamPath": "pstack",
       "localPath": "plugins/astack",
-      "sha": "12d587dfb20741cafc376c42c696c5f6e2a64487",
+      "sha": "23e4138daa01c42d4969f7a5465f82704e64f798",
       "exclude": [
         ".cursor-plugin/",
         ".gitignore",
