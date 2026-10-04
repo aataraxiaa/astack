@@ -23,19 +23,23 @@ The bootstrap revision is recorded in `tools/provenance.json`. Future releases f
 
 ```mermaid
 flowchart TD
-    T["Configured schedule<br/>on a commissioned host"] --> C["Check original PStack"]
-    C --> D{"Anything changed?"}
+    T["Configured schedule<br/>Weekly on a commissioned host"] --> C["Check original PStack"]
+    C --> H{"Saved unfinished candidate?"}
+    H -->|"Yes"| R
+    H -->|"No"| D{"Anything changed?"}
     D -->|"No"| Q["Finish quietly"]
     D -->|"Yes"| A["Inspect changes<br/>Prepare an isolated update"]
-    A --> R["Apply translation rules<br/>Preserve declared customizations"]
+    A --> R["Reconcile every upstream change<br/>Adapt skills, catalog, docs and packaging"]
     R --> V["Run project checks<br/>Test exact candidate in Claude and Codex"]
-    V --> G{"Checks passed and<br/>publication authorized?"}
+    V --> F{"Routine repair needed?"}
+    F -->|"Yes, policy is clear"| R
+    F -->|"No, or repair exhausted"| G{"Checks passed and<br/>publication authorized?"}
     G -->|"Yes"| P["Commit, tag, publish<br/>Verify release and installation"]
     P --> N["Notify the operator"]
     G -->|"No"| S["Keep evidence<br/>Report blocker or prepared candidate"]
 ```
 
-The schedule invokes an agent, which reads the [committed runbook](maintenance.md). It must stop when a change is ambiguous or a required check fails. Its host must have both authenticated runtimes available to validate a release. A check-only schedule needs fewer capabilities.
+The schedule invokes an agent, which reads the [committed runbook](maintenance.md). It inventories all upstream changes, including excluded files, and repairs routine adaptation failures before retrying checks. It stops for ambiguous policy, unavailable capabilities, or failures that remain after focused repair. A missing command-catalog entry does not require operator intervention. Its host must have both authenticated runtimes available to validate a release. A check-only schedule needs fewer capabilities.
 
 The optional GitHub pipeline separates preparation, runtime validation, and publication into jobs with different permissions. It is an alternative publisher. Only one publisher should be enabled for a repository.
 

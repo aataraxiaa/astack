@@ -22,7 +22,7 @@ bun tools/update-upstream.mjs --apply --report-dir "$report_dir"
 bash tools/check.sh
 ```
 
-The updater uses the inherited three-way sync implementation, with AStack's substitution rules and fork registry. It runs in fail-on-conflict mode: overlapping edits, modified files deleted upstream, symlinks, unknown Cursor constructs, and undeclared forks stop the update. New skills without a catalog row also stop generation. Review those changes, adapt the rules or declared fork, add a regression fixture, and retry. The updater does not use an LLM to silently guess its way through a conflict.
+The updater uses the inherited three-way sync implementation, with AStack's substitution rules and fork registry. It runs in fail-on-conflict mode: overlapping edits, modified files deleted upstream, symlinks, unknown Cursor constructs, and undeclared forks stop the update. New skills without a catalog row also stop generation. These are tool-level stops, not automatic requests for operator intervention. The scheduled agent reviews those changes, completes routine adaptations under existing policy, adds a regression fixture when behavior changes, and reruns validation. For new skills it reconciles the command catalog and counts and regenerates shortcuts. Escalate only when focused repair cannot resolve the failure or a policy or capability decision is required. The updater does not use an LLM to silently guess its way through a conflict.
 
 A failure after a successful sync can leave a partial candidate in the working branch. Inspect that diff; the release pipeline publishes only after all gates succeed. Preserve or discard that candidate explicitly before retrying because apply requires a clean tree. For manual conflict resolution, the lower-level `bun tools/sync.mjs pstack <full-sha>` can produce conflict markers; the generator rejects unresolved markers.
 
@@ -30,7 +30,7 @@ A failure after a successful sync can leave a partial candidate in the working b
 
 Use [maintenance setup](maintenance.md) to commission a scheduled agent on a host with authenticated Claude Code, Codex, and GitHub access. The [scheduler prompt](maintenance-prompt.md) points the agent at the same committed runbook on every run. Scheduling, credentials, checkout paths, and publication authorization are host settings outside this repository.
 
-A six-hour interval is a suggested starting point. Run one publisher per repository. The plugin itself neither installs nor enables a scheduler. See [the diagrams](workflow.md) for the source chain and release gates.
+A weekly interval is the default suggested cadence for the scheduled agent. Run one publisher per repository. The plugin itself neither installs nor enables a scheduler. See [the diagrams](workflow.md) for the source chain and release gates.
 
 ## Optional GitHub-hosted publication pipeline
 
