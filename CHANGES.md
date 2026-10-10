@@ -1,5 +1,9 @@
 # AStack changes
 
+## 0.1.3 - Original PStack 0.15.15
+
+Adapted original cursor/plugins/pstack at df581122cde17e6e27686b5a448bde23e4ad4318. Adds correct and portable poteto-help, including prompting and workflow recipes. Imports architectural review checks and ordered performance guidance. Retains native model configuration, session hooks, and relevant-defect testing policy. Updates the command catalog and generated shortcuts. No upstream files became port-only.
+
 ## 0.1.2 - Original PStack 0.15.6
 
 Adapted original cursor/plugins/pstack at 23e4138daa01c42d4969f7a5465f82704e64f798. Adds benchmark-checklist and Explain the Number, fresh-agent handoffs, hourly audit scheduling, and updated PR and performance guidance. Preserves operator-controlled merges and installed-plugin reads. Explicit driver and host-command substitutions keep the adaptation portable across Claude Code and Codex. No upstream files became port-only.

@@ -4,19 +4,21 @@ Start with the [README](../README.md).
 
 ## Slash commands
 
-The package includes 56 skill directories: 32 public skills and 24 `principle-*` references. Claude Code uses `/astack:<name>`. In Codex, request a skill by name or install the [optional shortcuts](#codex) for the `/name` form below.
+The package includes 58 skill directories: 34 public skills and 24 `principle-*` references. Claude Code uses `/astack:<name>`. In Codex, request a skill by name or install the [optional shortcuts](#codex) for the `/name` form below.
 
 Find each skill's instructions in the [skills tree](../plugins/astack/skills/).
 
 | command | use it when |
 | --- | --- |
 | `/poteto-mode` | default entry point for any non-trivial task |
+| `/poteto-help` | choose a workflow or get setup help without starting the work |
 | `/how` | walk through how a subsystem works |
 | `/why` | investigate why something was built this way (parallel multi-MCP evidence) |
 | `/architect` | settle types and module shape before writing code that crosses a function boundary |
 | `/arena` | run N parallel attempts at the same task and pick the best parts |
 | `/interrogate` | have three different models try to break a diff |
 | `/automate-me` | draft your own personal -mode skill from recent transcripts |
+| `/correct` | prevent recurring agent mistakes through architecture, types, checks, and tests |
 | `/reflect` | capture a long task's lessons as a skill edit |
 | `/tdd` | fix a bug by writing the failing test first, then the fix |
 | `/typescript-best-practices` | ground type-system discipline in TypeScript syntax |
@@ -65,6 +67,6 @@ Bun is needed for bundled scripts. GitHub workflows need authenticated `gh`; som
 
 See [upstream workflow](upstream.md), [adaptations](adaptations.md), and [CONTRIBUTING](../CONTRIBUTING.md). The command table above is the generator's source for Codex prompt descriptions; maintain one row per public skill.
 
-The skill tree is synced against upstream `23e4138daa01c42d4969f7a5465f82704e64f798` (v0.15.6). The machine-readable pin in `tools/upstream.json` is authoritative. The update tool keeps this sentence current.
+The skill tree is synced against upstream `df581122cde17e6e27686b5a448bde23e4ad4318` (v0.15.15). The machine-readable pin in `tools/upstream.json` is authoritative. The update tool keeps this sentence current.
 
 See [NOTICE](../NOTICE.md) and [LICENSE](../LICENSE) for attribution.

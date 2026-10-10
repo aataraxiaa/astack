@@ -269,6 +269,30 @@
       "why": "Normalizes the inherited trailing blank line so the release diff passes git diff --check.",
       "since": "0.1.0",
       "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/poteto-help/SKILL.md": {
+      "kind": "port-feature",
+      "why": "Uses native AStack installation, model settings, session hooks, driver and scheduler capability checks, packaged links, and supported skill catalog instead of Cursor-only behavior.",
+      "since": "0.1.3",
+      "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/poteto-help/references/prompting.md": {
+      "kind": "port-feature",
+      "why": "Clarifies native command names and scheduler authorization for portable examples.",
+      "since": "0.1.3",
+      "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/poteto-help/references/recipes.md": {
+      "kind": "port-feature",
+      "why": "Clarifies native command names and scheduler authorization for portable examples.",
+      "since": "0.1.3",
+      "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/correct/SKILL.md": {
+      "kind": "policy",
+      "why": "Uses the established relevant-defect sensitivity policy rather than the every-function-returns-nothing heuristic.",
+      "since": "0.1.3",
+      "upstream": "not-proposed"
     }
   },
   "cursor-team-kit": {

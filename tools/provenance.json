@@ -1,6 +1,6 @@
 {
   "source": "https://github.com/cursor/plugins",
-  "upstreamVersion": "0.15.6",
+  "upstreamVersion": "0.15.15",
   "adaptationReference": {
     "repository": "https://github.com/michael-denyer/pstack-claude",
     "commit": "eefcfaf31343a0c98d4bf0dc74a55d62b35ce9f9",

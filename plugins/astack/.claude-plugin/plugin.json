@@ -1,6 +1,6 @@
 {
   "name": "astack",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "PStack workflows adapted for Claude Code and Codex.",
   "author": {
     "name": "AStack contributors"

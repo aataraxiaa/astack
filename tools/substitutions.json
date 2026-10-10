@@ -1,6 +1,29 @@
 {
   "substitutions": [
     {
+      "regex": "default to one each on `(?:claude|gpt|grok|gemini|composer)-[^`]+` and `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/arena/SKILL\\.md$",
+      "replacement": "run one each on the defaults in [Models](#models).",
+      "rationale": "the runner defaults are stamped into the Models section"
+    },
+    {
+      "regex": "choose from `(?:claude|gpt|grok|gemini|composer)-[^`]+` and `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/arena/SKILL\\.md$",
+      "replacement": "choose from the runner defaults in [Models](#models).",
+      "rationale": "the cross-judge pool defaults to the stamped runners"
+    },
+    {
+      "regex": "use `(?:claude|gpt|grok|gemini|composer)-[^`]+` and `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\.",
+      "files": "^skills/architect/SKILL\\.md$",
+      "replacement": "use the defaults in [Models](#models).",
+      "rationale": "the runner defaults are stamped into the Models section"
+    },
+    {
+      "pattern": "Families go by prefix: `claude-*` and `grok-*`.",
+      "replacement": "Families go by model name, such as Opus, Fable, or Sonnet.",
+      "rationale": "Use native model families; Codex resolves its own families through the platform mapping."
+    },
+    {
       "pattern": "A built-in PR tool can default to draft, so set `draft: false` on every creation call through it.",
       "replacement": "A built-in PR tool can default to draft. Use its exposed schema to request a ready PR, setting `draft: false` when that field exists.",
       "rationale": "PR tools differ across harnesses; require ready status without inventing an unsupported parameter."
@@ -27,7 +50,7 @@
     },
     {
       "pattern": "The system prompt names the workspace's `agent-transcripts/` directory.",
-      "replacement": "Claude Code stores them at `~/.claude/projects/<encoded-cwd>/*.jsonl`, where `<encoded-cwd>` is the workspace's working directory with `/` \u2192 `-`.",
+      "replacement": "Claude Code stores them at `~/.claude/projects/<encoded-cwd>/*.jsonl`, where `<encoded-cwd>` is the workspace's working directory with `/` → `-`.",
       "rationale": "Claude Code's system prompt does not name a transcripts directory, so the port names the path and its encoding"
     },
     {
