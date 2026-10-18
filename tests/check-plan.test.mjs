@@ -15,7 +15,7 @@ if (!template) throw new Error("Multi-phase playbook has no plan skeleton");
 const skeleton = template[1];
 
 function run(plan) {
-  const dir = mkdtempSync(join(tmpdir(), "pstack-check-plan-"));
+  const dir = mkdtempSync(join(tmpdir(), "astack-check-plan-"));
   try {
     const file = join(dir, "plan.md");
     writeFileSync(file, plan);

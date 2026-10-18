@@ -31,7 +31,7 @@ Find each skill's instructions in the [skills tree](../plugins/astack/skills/).
 | `/show-me-your-work` | log decisions to a reviewable tsv decision trail |
 | `/blast-radius` | find what a change could break beyond the diff and prove safety by running code |
 | `/recall` | catch up on recent working context from chat history, live state, and the shared record |
-| `/setup-pstack` | configure pstack per-role model choices |
+| `/setup-astack` | configure AStack per-role model choices |
 | `/unslop` | clean up writing by removing AI tells |
 | `/no-comments` | strip comments before review, fix the accepted findings, encode claimed constraints |
 | `/create-verification-skill` | generate a project-local verification skill and feature map |
@@ -55,11 +55,11 @@ Use the native marketplace installation in the [README](../README.md#codex). Req
 
 ### Automatic routing
 
-Both manifests use the SessionStart hook. Review hook trust in the host. To disable routing, use `/astack:setup-pstack` on Claude or request setup-pstack on Codex and set `session hook: off`. AStack reads `astack-models.md` in that runtime's configuration directory.
+Both manifests use the SessionStart hook. Review hook trust in the host. To disable routing, use `/astack:setup-astack` on Claude or request setup-astack on Codex and set `session hook: off`. AStack reads `astack-models.md` in that runtime's configuration directory.
 
 ## Configuration and dependencies
 
-Use [setup-pstack](../plugins/astack/skills/setup-pstack/SKILL.md) to select available models. Defaults are in [models.json](../plugins/astack/models.json). A workflow cannot enable unavailable capabilities or extend user authorization.
+Use [setup-astack](../plugins/astack/skills/setup-astack/SKILL.md) to select available models. Defaults are in [models.json](../plugins/astack/models.json). A workflow cannot enable unavailable capabilities or extend user authorization.
 
 Bun is needed for bundled scripts. GitHub workflows need authenticated `gh`; some inherited stack workflows use Graphite. AStack does not install tools or change global settings implicitly.
 

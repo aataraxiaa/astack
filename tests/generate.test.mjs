@@ -190,17 +190,17 @@ describe("assertChangesHeading", () => {
 describe("validateCodexMarketplace", () => {
   const manifest = (plugins) => JSON.stringify({ plugins });
   test("needs one entry whose name matches and whose path exists", () => {
-    const ok = { name: "pstack", source: { path: "./plugins/astack" } };
+    const ok = { name: "astack", source: { path: "./plugins/astack" } };
     expect(() =>
-      validateCodexMarketplace(manifest([ok]), { expectedName: "pstack", pathExists: () => true }),
+      validateCodexMarketplace(manifest([ok]), { expectedName: "astack", pathExists: () => true }),
     ).not.toThrow();
-    expect(() => validateCodexMarketplace(manifest([]), { expectedName: "pstack", pathExists: () => true })).toThrow(
+    expect(() => validateCodexMarketplace(manifest([]), { expectedName: "astack", pathExists: () => true })).toThrow(
       "expected 1 plugin entry, found 0",
     );
     expect(() =>
-      validateCodexMarketplace(manifest([{ ...ok, name: "other" }]), { expectedName: "pstack", pathExists: () => true }),
-    ).toThrow('plugin name "other" != Codex manifest name "pstack"');
-    expect(() => validateCodexMarketplace(manifest([ok]), { expectedName: "pstack", pathExists: () => false })).toThrow(
+      validateCodexMarketplace(manifest([{ ...ok, name: "other" }]), { expectedName: "astack", pathExists: () => true }),
+    ).toThrow('plugin name "other" != Codex manifest name "astack"');
+    expect(() => validateCodexMarketplace(manifest([ok]), { expectedName: "astack", pathExists: () => false })).toThrow(
       "does not resolve to a directory",
     );
   });
@@ -516,9 +516,9 @@ describe("effort agents", () => {
   });
 
   test("stamping the agents list keeps every other manifest field", () => {
-    const text = '{\n  "name": "pstack",\n  "version": "1.0.0"\n}\n';
+    const text = '{\n  "name": "astack",\n  "version": "1.0.0"\n}\n';
     const out = stampAgentPaths(text, ["./agents/a.md"]);
-    expect(JSON.parse(out)).toEqual({ name: "pstack", version: "1.0.0", agents: ["./agents/a.md"] });
+    expect(JSON.parse(out)).toEqual({ name: "astack", version: "1.0.0", agents: ["./agents/a.md"] });
     expect(stampAgentPaths(out, ["./agents/a.md"])).toBe(out);
   });
 
@@ -542,7 +542,7 @@ describe("plan, changes, apply", () => {
     return dir;
   };
   const repoCopy = () => {
-    const dir = scratch("pstack-generate-");
+    const dir = scratch("astack-generate-");
     cpSync(repoRoot, dir, { recursive: true, filter: (src) => ![".git", "node_modules"].includes(basename(src)) });
     return dir;
   };
@@ -599,7 +599,7 @@ describe("plan, changes, apply", () => {
   });
 
   test("apply writes each planned file and removes every other entry in an owned directory", () => {
-    const root = scratch("pstack-apply-");
+    const root = scratch("astack-apply-");
     mkdirSync(join(root, "out/leftover"), { recursive: true });
     writeFileSync(join(root, "out/a.md"), "old");
     writeFileSync(join(root, "out/extra.md"), "orphan");
@@ -618,8 +618,8 @@ describe("plan, changes, apply", () => {
   });
 
   test("apply refuses a symlink at a planned path before writing anything", () => {
-    const root = scratch("pstack-apply-");
-    const outside = join(scratch("pstack-outside-"), "target.md");
+    const root = scratch("astack-apply-");
+    const outside = join(scratch("astack-outside-"), "target.md");
     writeFileSync(outside, "original");
     mkdirSync(join(root, "out"));
     symlinkSync(outside, join(root, "out/b.md"));
@@ -630,8 +630,8 @@ describe("plan, changes, apply", () => {
   });
 
   test("apply removes a stray symlink in an owned directory without touching its target", () => {
-    const root = scratch("pstack-apply-");
-    const outside = scratch("pstack-outside-");
+    const root = scratch("astack-apply-");
+    const outside = scratch("astack-outside-");
     writeFileSync(join(outside, "target.md"), "original");
     mkdirSync(join(root, "out"));
     symlinkSync(join(outside, "target.md"), join(root, "out/stray.md"));
@@ -642,8 +642,8 @@ describe("plan, changes, apply", () => {
   });
 
   test("apply refuses a planned path under a symlinked directory", () => {
-    const root = scratch("pstack-apply-");
-    const outside = scratch("pstack-outside-");
+    const root = scratch("astack-apply-");
+    const outside = scratch("astack-outside-");
     mkdirSync(join(root, "skills"));
     symlinkSync(outside, join(root, "skills/out"), "dir");
     for (const intended of [
@@ -656,8 +656,8 @@ describe("plan, changes, apply", () => {
   });
 
   test("apply refuses a symlinked owned directory with no planned files and deletes nothing through it", () => {
-    const root = scratch("pstack-apply-");
-    const outside = scratch("pstack-outside-");
+    const root = scratch("astack-apply-");
+    const outside = scratch("astack-outside-");
     writeFileSync(join(outside, "keep.md"), "original");
     symlinkSync(outside, join(root, "out"), "dir");
     expect(() => apply(root, { files: {}, ownedDirs: ["out"] }, quiet)).toThrow(
@@ -667,7 +667,7 @@ describe("plan, changes, apply", () => {
   });
 
   test("changes refuses a directory at a planned path", () => {
-    const root = scratch("pstack-apply-");
+    const root = scratch("astack-apply-");
     mkdirSync(join(root, "out/a.md"), { recursive: true });
     expect(() => changes(root, { files: { "out/a.md": "A" }, ownedDirs: ["out"] })).toThrow(
       "out/a.md is not a regular file; the generator never overwrites one",
@@ -675,7 +675,7 @@ describe("plan, changes, apply", () => {
   });
 
   test("a planned file nested under an owned directory converges instead of being removed", () => {
-    const root = scratch("pstack-apply-");
+    const root = scratch("astack-apply-");
     const intended = { files: { "out/sub/a.md": "A" }, ownedDirs: ["out"] };
     apply(root, intended, quiet);
     expect(changes(root, intended)).toEqual([]);
@@ -797,7 +797,7 @@ describe("plan, changes, apply", () => {
 
   test("--check reports a symlink at a planned path alongside the other failures and writes nothing", () => {
     const root = repoCopy();
-    const outside = join(scratch("pstack-outside-"), "target.md");
+    const outside = join(scratch("astack-outside-"), "target.md");
     writeFileSync(outside, "original");
     rmSync(join(root, STUB));
     symlinkSync(outside, join(root, STUB));

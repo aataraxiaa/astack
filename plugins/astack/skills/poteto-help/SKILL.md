@@ -1,13 +1,13 @@
 ---
 name: poteto-help
-description: Guides users through pstack setup, /poteto-mode, and picking the skill, playbook, or principle for a task. Type /poteto-help with a question.
+description: Guides users through AStack setup, /poteto-mode, and picking the skill, playbook, or principle for a task. Type /poteto-help with a question.
 ---
 
 # Poteto help
 
-Answer the user's question about AStack, hand them a prompt they can send, and link the file the answer came from. For a help question, don't start the work. The user asked how, and a pstack run spends real tokens, so let them send the prompt.
+Answer the user's question about AStack, hand them a prompt they can send, and link the file the answer came from. For a help question, don't start the work. The user asked how, and an AStack run spends real tokens, so let them send the prompt.
 
-A message that asks for work, such as "use pstack to fix this bug", is not a help question. Read [`poteto-mode`](../poteto-mode/SKILL.md), do the work under it, and respect the current runtime’s session-hook setting.
+A message that asks for work, such as "use AStack to fix this bug", is not a help question. Read [`poteto-mode`](../poteto-mode/SKILL.md), do the work under it, and respect the current runtime’s session-hook setting.
 
 This file maps questions to installed skills and references. Read the target file before answering. Its instructions own the details. Link the installed AStack file you read. Original [PStack sources](https://github.com/cursor/plugins/tree/main/pstack) are attribution and background, not instructions for AStack's adapted runtime behavior. Do not invent a public AStack repository URL.
 
@@ -25,21 +25,21 @@ Infer the need from the message and the conversation. A named situation, such as
 
 Check the state that changes the answer, and mention it only when it does:
 
-- Read the current runtime’s override sheet at the path in [`setup-pstack`](../setup-pstack/SKILL.md). A missing sheet means role defaults apply; do not infer whether setup was previously run.
+- Read the current runtime’s override sheet at the path in [`setup-astack`](../setup-astack/SKILL.md). A missing sheet means role defaults apply; do not infer whether setup was previously run.
 - No `verify` or `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/create-verification-skill` when the question is about proving a change works.
 
 When the override sheet is missing and it matters, ask whether the user wants to pick a model for each role and a reasoning effort now. It matters when the user is new, the question is about setup or cost, or the answer depends on which models run. Ask at most once per chat. If the need is also unclear, ask both questions together. Offer two choices:
 
-- Now: give them `/setup-pstack` to type, and answer their question too.
-- Later: answer their question, and add one line saying every role keeps its default model until they run `/setup-pstack`.
+- Now: give them `/setup-astack` to type, and answer their question too.
+- Later: answer their question, and add one line saying every role keeps its default model until they run `/setup-astack`.
 
 ## Get set up
 
 1. Use the active runtime's native plugin marketplace to install AStack from the repository supplied by the operator. Inspect the configured marketplace and native command help before suggesting an installation command; do not guess its owner or URL.
-2. Run [`/setup-pstack`](../setup-pstack/SKILL.md) to select available per-role models, reasoning effort, and whether the session hook routes tasks. It documents configuration paths and loading for each runtime.
+2. Run [`/setup-astack`](../setup-astack/SKILL.md) to select available per-role models, reasoning effort, and whether the session hook routes tasks. It documents configuration paths and loading for each runtime.
 3. Start a task with `/poteto-mode`, a goal, and a check that can pass or fail. Offer to word it using [`references/prompting.md`](references/prompting.md).
 
-AStack supports Claude Code and Codex through its native packaging and [platform mapping](../poteto-mode/references/codex-tools.md). Its enabled SessionStart hook injects routing instructions; Codex requires hook trust. `/setup-pstack` can turn this hook off. Turning it off affects fresh sessions; it does not erase instructions already in the current context.
+AStack supports Claude Code and Codex through its native packaging and [platform mapping](../poteto-mode/references/codex-tools.md). Its enabled SessionStart hook injects routing instructions; Codex requires hook trust. `/setup-astack` can turn this hook off. Turning it off affects fresh sessions; it does not erase instructions already in the current context.
 
 Subagents and review panels use extra tokens. The override sheet selects models and effort; panel length controls the number of seats. `auto` and `inherit-parent` reuse the parent model, which is not necessarily cheaper. Recommend choices only from models the runtime actually exposes.
 
@@ -47,7 +47,7 @@ Subagents and review panels use extra tokens. The override sheet selects models 
 
 `/poteto-mode` matches the task to a playbook, copies the playbook's steps into the todo list, and runs the other skills as the steps need them. A step it skips stays in the list as `skip: <reason>`. A good prompt states the goal and how to tell it's done. It doesn't list skills, because a hand-written sequence tends to drop or reorder steps the playbook would keep. Read [`references/prompting.md`](references/prompting.md) before you help word one.
 
-For persistent routing, check the SessionStart hook and override sheet described in [`setup-pstack`](../setup-pstack/SKILL.md). With the hook disabled or unavailable, invoke `/poteto-mode` for each new task. Do not promise Cursor Custom Mode keyboard shortcuts in Claude Code or Codex. A new task requires choosing a fresh playbook.
+For persistent routing, check the SessionStart hook and override sheet described in [`setup-astack`](../setup-astack/SKILL.md). With the hook disabled or unavailable, invoke `/poteto-mode` for each new task. Do not promise Cursor Custom Mode keyboard shortcuts in Claude Code or Codex. A new task requires choosing a fresh playbook.
 
 For subagent dispatch, follow [`poteto-mode`](../poteto-mode/SKILL.md) and the active runtime mapping. They specify the wrapper, model overrides, and isolation requirements.
 
@@ -78,7 +78,7 @@ The default answer is `/poteto-mode`, which runs most of the others when its ste
 | Vet a performance number before reporting or acting on it | [`/benchmark-checklist`](../benchmark-checklist/SKILL.md) |
 | Run a large or cross-cutting change, or one to review after stepping away | [`/figure-it-out`](../figure-it-out/SKILL.md) |
 | Keep a decision log during a run, and review it afterward | [`/show-me-your-work`](../show-me-your-work/SKILL.md) |
-| Pick a model for each role and a reasoning effort | [`/setup-pstack`](../setup-pstack/SKILL.md) |
+| Pick a model for each role and a reasoning effort | [`/setup-astack`](../setup-astack/SKILL.md) |
 | Turn their own working habits into a personal mode skill | [`/automate-me`](../automate-me/SKILL.md) |
 | Turn what a finished task taught into skill edits | [`/reflect`](../reflect/SKILL.md) |
 | Stop agents from repeating the same mistakes in this repo | [`/correct`](../correct/SKILL.md) |
@@ -125,7 +125,7 @@ Principles are one-rule skills that `/poteto-mode` reads and cites in its replie
 |---|---|
 | The mode stopped applying after a few turns | Check the session-hook setting and start a fresh session, or invoke `/poteto-mode` for this task. |
 | A question got treated as the next step of the last task | Say "new task", or say the turn doesn't need the mode. |
-| A new model choice had no effect | Check that the override sheet is loaded as described in setup-pstack, then start a fresh session. |
+| A new model choice had no effect | Check that the override sheet is loaded as described in setup-astack, then start a fresh session. |
 | Runs cost more than expected | See the cost paragraph under Get set up. |
 | A skill didn't load on its own | Invoke the skill explicitly and check native plugin discovery. The session hook routes qualifying tasks, not every skill on every turn. |
 | Parallel agents overwrote each other | Give each writer its own worktree. Check the actual dispatch environment; do not assume a separate machine. |

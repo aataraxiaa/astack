@@ -1,6 +1,6 @@
 ---
 name: poteto-agent-xhigh
-description: `astack:poteto-agent` at xhigh reasoning effort. Dispatched in place of `astack:poteto-agent` when a pstack role's override names `@xhigh`. The caller passes the model.
+description: `astack:poteto-agent` at xhigh reasoning effort. Dispatched in place of `astack:poteto-agent` when an AStack role's override names `@xhigh`. The caller passes the model.
 effort: xhigh
 ---
 

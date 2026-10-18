@@ -187,7 +187,7 @@ const isBinary = (rel, raw) => BINARY.test(rel) || raw.includes(0) || !Buffer.fr
 // merge binary files" reads as 255, a usage error as 129); those and a missing
 // git are errors, not conflicts, and rethrow.
 export function mergeFile(ours, base, theirs) {
-  const scratch = mkdtempSync(join(tmpdir(), "pstack-merge-"));
+  const scratch = mkdtempSync(join(tmpdir(), "astack-merge-"));
   try {
     const paths = { ours, base, theirs };
     for (const [name, buffer] of Object.entries(paths)) writeFileSync(join(scratch, name), buffer);
@@ -211,7 +211,7 @@ export function mergeFile(ours, base, theirs) {
 // Call only on differing bytes. `--no-index` exits 1 when the two differ, and
 // also on errors, which print no numstat line.
 export function changedLines(base, kept) {
-  const scratch = mkdtempSync(join(tmpdir(), "pstack-diff-"));
+  const scratch = mkdtempSync(join(tmpdir(), "astack-diff-"));
   try {
     writeFileSync(join(scratch, "kept"), kept);
     const args = ["diff", "--no-index", "--numstat", "--text", "-", join(scratch, "kept")];
@@ -286,6 +286,8 @@ export function classify({ old = null, new: next = null, local = null }) {
 const FORK_OUTCOMES = new Set(["forked", "mode-only", "merged", "conflicted"]);
 
 // Compare old-upstream vs new-upstream vs local for one component tree.
+// `pathRenames` maps upstream path prefixes to local prefixes. Substitutions
+// and exclusions use upstream paths; derivation and fork declarations use local paths.
 // `derive(rel, text)` turns substituted upstream text into the port's form;
 // the default is identity. `forks`, from parseForks, adds the registry check:
 // an undeclared fork lands in `undeclared` and blocks every write, and an entry
@@ -298,6 +300,7 @@ export function syncComponent({
   rules,
   denylist = [],
   exclude = [],
+  pathRenames = {},
   carriedElsewhere = [],
   derive = (_, t) => t,
   forks = null,
@@ -318,21 +321,52 @@ export function syncComponent({
     counts: new Map(),
     hits: [],
   };
-  const portForm = (rel, raw) => {
+  if (!pathRenames || typeof pathRenames !== "object" || Array.isArray(pathRenames)) {
+    throw new Error("pathRenames must be an object mapping upstream paths to local paths");
+  }
+  const renames = Object.entries(pathRenames);
+  const within = (path, prefix) => path === prefix || path.startsWith(`${prefix}/`);
+  for (const [source, destination] of renames) {
+    for (const path of [source, destination]) {
+      if (typeof path !== "string" || /[\\\0:]/.test(path) || path.split("/").some((part) => !part || part === "." || part === "..")) {
+        throw new Error(`pathRenames: unsafe relative path ${JSON.stringify(path)}`);
+      }
+    }
+    if (renames.some(([other]) => other !== source && (within(source, other) || within(other, source)))) {
+      throw new Error(`pathRenames: overlapping source ${source}`);
+    }
+  }
+  const localPath = (source) => {
+    const rename = renames.find(([prefix]) => within(source, prefix));
+    return rename ? rename[1] + source.slice(rename[0].length) : source;
+  };
+  const portForm = (rel, source, raw) => {
     if (isBinary(rel, raw)) return { bytes: raw, counts: new Map(), binary: true };
-    const sub = applySubstitutions(raw.toString("utf8"), rules, rel);
+    const sub = applySubstitutions(raw.toString("utf8"), rules, source);
     return { bytes: Buffer.from(derive(rel, sub.text)), counts: sub.counts };
   };
   const listed = (dir) => new Set(walk(dir).map((file) => relative(dir, file)));
-  const [oldPaths, newPaths, localPaths] = [listed(oldDir), listed(newDir), listed(localDir)];
+  const sources = new Map();
+  const indexed = (dir) => new Map([...listed(dir)].map((source) => {
+    const rel = localPath(source);
+    if (sources.has(rel) && sources.get(rel) !== source) {
+      throw new Error(`pathRenames: collision at ${rel} between ${sources.get(rel)} and ${source}`);
+    }
+    sources.set(rel, source);
+    return [rel, source];
+  }));
+  const oldPaths = indexed(oldDir);
+  const newPaths = indexed(newDir);
+  const localPaths = listed(localDir);
   const upstream = (dir, paths, rel) => {
     if (!paths.has(rel)) return null;
-    const file = join(dir, rel);
+    const source = paths.get(rel);
+    const file = join(dir, source);
     const stat = lstatSync(file);
     // Following a link would copy whatever it points at, even outside the
     // clone, into the port.
     if (stat.isSymbolicLink()) return { symlink: true };
-    return lazyFile(stat.mode & 0o777, () => portForm(rel, readFileSync(file)));
+    return lazyFile(stat.mode & 0o777, () => portForm(rel, source, readFileSync(file)));
   };
   const portCopy = (rel) => {
     const file = join(localDir, rel);
@@ -350,10 +384,23 @@ export function syncComponent({
   // A port link where upstream has a directory is reported at the link, and
   // nothing under it is read or written, since each write would land in its target.
   const dirsAbove = (rel) => rel.split("/").slice(0, -1).map((_, i, parts) => parts.slice(0, i + 1).join("/"));
-  const upstreamDirs = new Set([...oldPaths, ...newPaths].filter((rel) => !isExcluded(rel, exclude)).flatMap(dirsAbove));
+  const upstreamPaths = [...sources.keys()];
+  const upstreamDirs = new Set(upstreamPaths.filter((rel) => !isExcluded(sources.get(rel), exclude)).flatMap(dirsAbove));
+  for (const paths of [oldPaths, newPaths]) {
+    for (const rel of paths.keys()) {
+      for (const parent of dirsAbove(rel)) {
+        if (paths.has(parent)) throw new Error(`pathRenames: file/directory collision at ${parent}`);
+      }
+    }
+  }
+  for (const rel of upstreamDirs) {
+    if (localPaths.has(rel) && !lstatSync(join(localDir, rel)).isSymbolicLink()) {
+      throw new Error(`pathRenames: file/directory collision at ${rel}`);
+    }
+  }
   const isLink = (rel) => localPaths.has(rel) && lstatSync(join(localDir, rel)).isSymbolicLink();
   const outcomeOf = (rel) => {
-    if (isExcluded(rel, exclude)) return newPaths.has(rel) ? { kind: "excluded" } : null;
+    if (isExcluded(sources.get(rel) ?? rel, exclude)) return newPaths.has(rel) ? { kind: "excluded" } : null;
     if (dirsAbove(rel).some(isLink)) return null;
     if (!oldPaths.has(rel) && !newPaths.has(rel)) {
       if (upstreamDirs.has(rel) && isLink(rel)) return { kind: "symlink" };
@@ -365,7 +412,7 @@ export function syncComponent({
       throw new Error(`${rel}: ${error.message}`, { cause: error });
     }
   };
-  const outcomes = [...new Set([...newPaths, ...oldPaths, ...localPaths])].flatMap((rel) => {
+  const outcomes = [...new Set([...newPaths.keys(), ...oldPaths.keys(), ...localPaths])].flatMap((rel) => {
     const outcome = outcomeOf(rel);
     return outcome ? [{ rel, ...outcome }] : [];
   });
@@ -446,16 +493,15 @@ function main() {
     console.error(`usage: bun tools/sync.mjs <${Object.keys(upstream.components).join("|")}> <new-sha> [--dry-run] [--fail-on-conflict]`);
     process.exit(2);
   }
-  const { substitutions, denylist } = parseSubstitutions(
-    JSON.parse(readFileSync(join(repo, "tools/substitutions.json"), "utf8")),
-  );
+  const adaptation = JSON.parse(readFileSync(join(repo, "tools/substitutions.json"), "utf8"));
+  const { substitutions, denylist } = parseSubstitutions(adaptation);
   const forks =
     parseForks(JSON.parse(readFileSync(join(repo, "tools/forks.json"), "utf8")), upstream.components)[component] ??
     new Map();
   const models = loadModels(repo);
   const leads = loadLeadLines(repo);
 
-  const scratch = mkdtempSync(join(tmpdir(), "pstack-sync-"));
+  const scratch = mkdtempSync(join(tmpdir(), "astack-sync-"));
   try {
     console.log(`cloning ${upstream.remote} ...`);
     git(["clone", "--filter=blob:none", upstream.remote, join(scratch, "clone")]);
@@ -471,6 +517,7 @@ function main() {
       newDir,
       localDir: join(repo, spec.localPath),
       rules: substitutions,
+      pathRenames: adaptation.pathRenames,
       denylist,
       exclude: spec.exclude ?? [],
       carriedElsewhere: pathsOtherComponentsCarry(join(scratch, "clone"), upstream.components, component),

@@ -86,14 +86,20 @@ try {
     throw new Error('usage: resume.mjs begin|publish|read --project <directory> [--note <file> --artifact <file> ...]');
   if (operation !== 'publish' && (values.note || values.artifact.length)) throw new Error('only publish accepts files');
   const project = identity(values.project);
-  const store = join(project.gitDir, 'pstack', 'resume');
+  let store = join(project.gitDir, 'astack', 'resume');
   if (operation === 'read') {
     try {
       lstatSync(join(store, 'latest.json'));
     } catch (error) {
       if (error.code !== 'ENOENT') throw error;
-      console.log(JSON.stringify({ kind: 'missing' }));
-      process.exit(2);
+      store = join(project.gitDir, 'pstack', 'resume');
+      try {
+        lstatSync(join(store, 'latest.json'));
+      } catch (legacyError) {
+        if (legacyError.code !== 'ENOENT') throw legacyError;
+        console.log(JSON.stringify({ kind: 'missing' }));
+        process.exit(2);
+      }
     }
     console.log(JSON.stringify({ kind: 'checkpoint', checkpoint: load(store, project) }));
   } else {

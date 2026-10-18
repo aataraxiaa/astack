@@ -18,7 +18,7 @@
 //   plugins/astack/models.json (the model policy: role defaults, diverse panel,
 //   available slugs, Codex equivalents)
 //     -> each model-consuming skill's "## Models" and "## Reasoning effort" sections
-//     -> setup-pstack's Models section and override-sheet block, and interrogate's reviewer table
+//     -> setup-astack's Models section and override-sheet block, and interrogate's reviewer table
 //     -> the "## Model names" section of poteto-mode/references/codex-tools.md
 //     -> one effort agent pair per level in plugins/astack/effort-agents/
 //   the Per-skill notes table in poteto-mode/references/codex-tools.md
@@ -365,13 +365,13 @@ export function regions(models) {
       render: () => blankPadded(effortSection(models.efforts, models.defaultEffort)),
     })),
     {
-      file: skillFile("setup-pstack"),
+      file: skillFile("setup-astack"),
       name: "Models section",
       locate: section("Models"),
       render: () => blankPadded(setupModelsSection(models)),
     },
     {
-      file: skillFile("setup-pstack"),
+      file: skillFile("setup-astack"),
       name: "override sheet",
       locate: fenceUnder("Write the override sheet", "markdown"),
       render: () => [overrideSheetBlock(models)],
@@ -583,7 +583,7 @@ export function modelsSection(roles) {
   const bullets = roles.map((r) => `- ${r.role}: ${codeList(r.models)}`).join("\n");
   return (
     "Role defaults, stamped from `plugins/astack/models.json` (edit there, rerun `tools/generate.mjs`). " +
-    "A matching role line in the `astack-models.md` override sheet overrides each at runtime; `/setup-pstack` writes it and lists its path per runtime.\n\n" +
+    "A matching role line in the `astack-models.md` override sheet overrides each at runtime; `/setup-astack` writes it and lists its path per runtime.\n\n" +
     bullets
   );
 }
@@ -618,10 +618,10 @@ export function effortAgents(levels, potetoAgent) {
     {
       name: `effort-${level}`,
       text:
-        `---\nname: effort-${level}\ndescription: pstack subagent with the full tool set that runs at ${level} reasoning effort. ` +
+        `---\nname: effort-${level}\ndescription: AStack subagent with the full tool set that runs at ${level} reasoning effort. ` +
         `Its system prompt is this file, not the built-in \`general-purpose\` prompt. Dispatched in place of ` +
-        `\`general-purpose\` when a pstack role's override names \`@${level}\`. The caller passes the model.\n` +
-        `effort: ${level}\n---\n\n# pstack subagent (${level} effort)\n\n` +
+        `\`general-purpose\` when an AStack role's override names \`@${level}\`. The caller passes the model.\n` +
+        `effort: ${level}\n---\n\n# AStack subagent (${level} effort)\n\n` +
         "Do the task in your prompt. You have the full tool set. " +
         "The effort level changes how long you reason, not the task.\n",
     },
@@ -629,7 +629,7 @@ export function effortAgents(levels, potetoAgent) {
       name: `poteto-agent-${level}`,
       text:
         `---\nname: poteto-agent-${level}\ndescription: \`astack:poteto-agent\` at ${level} reasoning effort. ` +
-        `Dispatched in place of \`astack:poteto-agent\` when a pstack role's override names \`@${level}\`. The caller passes the model.\n` +
+        `Dispatched in place of \`astack:poteto-agent\` when an AStack role's override names \`@${level}\`. The caller passes the model.\n` +
         `effort: ${level}\n---\n` + body,
     },
   ]);
@@ -669,13 +669,13 @@ export function setupModelsSection(models) {
 export function overrideSheetBlock(models) {
   const rows = models.roles.map((r) => `${r.role}: ${r.models.join(", ")}`).join("\n");
   return (
-    "# pstack model configuration\n\n" +
-    "Per-role model overrides for pstack skills. Each pstack SKILL.md names its defaults in a Models section; " +
+    "# AStack model configuration\n\n" +
+    "Per-role model overrides for AStack skills. Each AStack SKILL.md names its defaults in a Models section; " +
     "the values here override those defaults. Delete a line to fall back to the skill default. " +
     "A value of `inherit-parent` or `auto` runs that role on the parent session's model (the `Agent` call omits `model`); " +
     "an alias entry in a panel list still counts toward that panel's fan-out. " +
     "A model may carry a reasoning effort, as in `opus @xhigh` (levels: " + models.efforts.join(", ") + "); " +
-    "the role then runs through the pstack effort agent of that level, each entry of a panel list on its own. " +
+    "the role then runs through the AStack effort agent of that level, each entry of a panel list on its own. " +
     "`default effort` sets the level for a value without one; `session` keeps the parent session's effort. " +
     "`session hook: off` stops the Claude Code or Codex SessionStart hook from injecting the poteto-mode mandate; " +
     "any other value, or no line, leaves it on.\n\n" +
@@ -697,7 +697,7 @@ export function codexModelNamesSection(models) {
     "signal comes from model diversity, so use the distinct Codex models available to you. A good default panel " +
     `on ChatGPT is ${codeList(models.codex.panel)}. If only one model family is reachable, vary reasoning ` +
     "effort and note in the verdict that diversity was reduced.\n\n" +
-    "`/setup-pstack` writes the configured model list. On Codex, set it to your Codex model slugs."
+    "`/setup-astack` writes the configured model list. On Codex, set it to your Codex model slugs."
   );
 }
 

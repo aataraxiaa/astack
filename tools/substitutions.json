@@ -111,8 +111,8 @@
     },
     {
       "pattern": "Use the `interrogate reviewers` line in `~/.cursor/rules/pstack-models.mdc`,",
-      "replacement": "Use the `interrogate reviewers` line in the `astack-models.md` override sheet (`/setup-pstack` lists its path per runtime),",
-      "rationale": "interrogate has no Models section to name the sheet's home, so the sentence points at setup-pstack; must precede the sheet-path rule"
+      "replacement": "Use the `interrogate reviewers` line in the `astack-models.md` override sheet (`/setup-astack` lists its path per runtime),",
+      "rationale": "interrogate has no Models section to name the sheet's home, so the sentence points at setup-astack; must precede the sheet-path rule"
     },
     {
       "pattern": "(usually `.cursor/skills/verify-*/`)",
@@ -393,9 +393,44 @@
       "rationale": "AStack configuration is separate from PStack."
     },
     {
-      "pattern": "plugins/pstack",
       "replacement": "plugins/astack",
-      "rationale": "Maintainer paths refer to the AStack package."
+      "rationale": "Maintainer paths refer to the AStack package.",
+      "regex": "(?<!cursor/)(?<!cursor-)plugins/pstack\\b"
+    },
+    {
+      "pattern": "setup-pstack",
+      "replacement": "setup-astack",
+      "rationale": "AStack owns the model setup command and maps its upstream directory during sync."
+    },
+    {
+      "replacement": "an AStack",
+      "rationale": "Use the AStack name with the matching article.",
+      "regex": "\\ba pstack(?= (?:skill|role|subagent|model|effort|plugin))"
+    },
+    {
+      "regex": "\\bpstack(?= (?:skill|role|subagent|model|effort|plugin))",
+      "replacement": "AStack",
+      "rationale": "Runtime descriptions identify AStack while source names and URLs retain their original identity."
+    },
+    {
+      "pattern": "# Setup pstack",
+      "replacement": "# Setup AStack",
+      "rationale": "The setup heading names the installed plugin."
+    },
+    {
+      "pattern": "Configure which models pstack uses",
+      "replacement": "Configure which models AStack uses",
+      "rationale": "The setup description names the installed plugin."
+    },
+    {
+      "pattern": "changing pstack's model choices",
+      "replacement": "changing AStack's model choices",
+      "rationale": "The setup trigger names the installed plugin."
+    },
+    {
+      "pattern": "such as `pstack` or `poteto-mode`",
+      "replacement": "such as `astack` or `poteto-mode`",
+      "rationale": "Commit scope examples use this package name."
     }
   ],
   "denylist": [
@@ -409,7 +444,7 @@
     },
     {
       "token": "pstack-models.mdc",
-      "hint": "Cursor's rule file; the port's override sheet is pstack-models.md, at the path setup-pstack lists per runtime"
+      "hint": "Cursor's rule file; the port's override sheet is astack-models.md, at the path setup-astack lists per runtime"
     },
     {
       "token": "`verify` skill (UIs)",
@@ -491,5 +526,8 @@
       "token": "cloud-sleeper",
       "hint": "Cursor's cloud wake chain; Claude Code's /loop schedules its own wake-up"
     }
-  ]
+  ],
+  "pathRenames": {
+    "skills/setup-pstack": "skills/setup-astack"
+  }
 }

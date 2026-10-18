@@ -17,12 +17,12 @@ const gh = (...args) => execFileSync('gh', args, {
 });
 const api = (...args) => JSON.parse(gh('api', ...args));
 const login = api('user').login;
-const name = `pstack-merge-safety-fixture-${randomUUID()}`;
+const name = `astack-merge-safety-fixture-${randomUUID()}`;
 let created = false;
 const repository = `${login}/${name}`;
 const path = `repos/${repository}`;
 const shippingCli = fileURLToPath(new URL('./ship-pr', import.meta.url));
-const scratch = mkdtempSync(join(tmpdir(), 'pstack-live-shipping-'));
+const scratch = mkdtempSync(join(tmpdir(), 'astack-live-shipping-'));
 const ship = (...args) => JSON.parse(execFileSync('bun', [shippingCli, ...args], { encoding: 'utf8' }));
 function inspect(pr) {
   const result = ship('inspect', '--repo', repository, '--pr', String(pr));
@@ -58,7 +58,7 @@ async function waitForMergeable(pr, head, base, baseOid) {
       (baseOid === undefined || facts.revision.baseRefOid === baseOid));
 }
 try {
-  const repo = api('user/repos', '-X', 'POST', '-f', `name=${name}`, '-F', 'private=true', '-F', 'auto_init=true', '-f', 'description=Disposable pstack merge-safety verification fixture');
+  const repo = api('user/repos', '-X', 'POST', '-f', `name=${name}`, '-F', 'private=true', '-F', 'auto_init=true', '-f', 'description=Disposable astack merge-safety verification fixture');
   created = true;
   assert.equal(repo.full_name, repository);
   assert.equal(repo.private, true);

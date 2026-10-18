@@ -1,14 +1,13 @@
 {
   "name": "astack",
-  "version": "0.1.3",
-  "description": "PStack workflows adapted for Claude Code and Codex.",
+  "version": "0.1.4",
+  "description": "AStack workflows for Claude Code and Codex.",
   "author": {
     "name": "AStack contributors"
   },
   "license": "MIT",
   "keywords": [
     "astack",
-    "pstack",
     "claude-code",
     "codex",
     "skills"
@@ -17,7 +16,7 @@
   "hooks": "./hooks/codex-hooks.json",
   "interface": {
     "displayName": "AStack",
-    "shortDescription": "PStack workflows for Claude Code and Codex",
+    "shortDescription": "AStack workflows for Claude Code and Codex",
     "developerName": "AStack contributors",
     "category": "Developer Tools",
     "capabilities": [

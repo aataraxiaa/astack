@@ -41,7 +41,7 @@ const runtimes = {
 };
 
 function runHook(runtime, sheet, command = sessionStart[runtimes[runtime].hooks].hooks[0].command) {
-  const home = mkdtempSync(join(tmpdir(), "pstack-hook-"));
+  const home = mkdtempSync(join(tmpdir(), "astack-hook-"));
   const { sheetDir, env } = runtimes[runtime];
   const sheetRoot = join(home, sheetDir);
   if (sheet !== null) {

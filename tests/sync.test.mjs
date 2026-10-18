@@ -204,7 +204,7 @@ describe("applySubstitutions", () => {
     [
       "skills/poteto-mode/playbooks/autonomous-run.md",
       "Pick the wake mechanism using Cursor's `/loop` command (a built-in, not a pstack skill).",
-      "Pick the wake mechanism using Claude Code's `loop` skill (a built-in, not a pstack skill).",
+      "Pick the wake mechanism using Claude Code's `loop` skill (a built-in, not an AStack skill).",
     ],
     [
       "skills/poteto-mode/SKILL.md",
@@ -1255,7 +1255,7 @@ describe("sync CLI", () => {
 
     expect(result.stderr).toContain("FAIL: Cursor-isms");
     expect(result.status).toBe(1);
-    expect(readdirSync(scratch).filter((name) => name.startsWith("pstack-"))).toEqual([]);
+    expect(readdirSync(scratch).filter((name) => name.startsWith("astack-"))).toEqual([]);
   });
 
   test("a run with a text conflict writes the markers and advances the pin", () => {

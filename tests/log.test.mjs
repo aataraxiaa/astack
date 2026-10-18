@@ -10,7 +10,7 @@ const logScript = fileURLToPath(new URL("../plugins/astack/skills/show-me-your-w
 // A spreadsheet runs a leading = + - @ as a formula, and a quote-aware TSV
 // reader unwraps a leading " (or runs an unterminated one into later rows).
 test("cells a spreadsheet or TSV reader would reinterpret are written with a leading quote", () => {
-  const dir = mkdtempSync(join(tmpdir(), "pstack-log-"));
+  const dir = mkdtempSync(join(tmpdir(), "astack-log-"));
   try {
     const log = join(dir, "log.tsv");
     const risky = ['"=HYPERLINK(""http://x"")"', '"unterminated', "=1+1", "+1", "-1", "@SUM(A1)"];

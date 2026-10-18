@@ -1,6 +1,6 @@
 # AStack
 
-PStack workflows for Claude Code and Codex.
+AStack workflows for Claude Code and Codex.
 
 AStack starts from the working Claude/Codex adaptation in [pstack-claude](https://github.com/michael-denyer/pstack-claude), then maintains its own adaptations directly against [Lauren Tan's original PStack](https://github.com/cursor/plugins/tree/main/pstack). The port is an attributed bootstrap, not an ongoing dependency. Exact source revisions are recorded in [upstream pins](tools/upstream.json) and [provenance](tools/provenance.json).
 
@@ -19,7 +19,7 @@ Run in Claude Code:
 
 For development from a local checkout, use `claude --plugin-dir "$PWD/plugins/astack"`.
 
-Use `/astack:poteto-mode` for the main workflow and `/astack:setup-pstack` for model and routing configuration. Skill names retain their upstream names; the plugin namespace and configuration belong to AStack.
+Use `/astack:poteto-mode` for the main workflow and `/astack:setup-astack` for model and routing configuration. AStack uses its own plugin namespace, setup command, and model configuration.
 
 ### Codex
 

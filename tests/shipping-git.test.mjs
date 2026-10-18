@@ -18,7 +18,7 @@ const runRecipe = (cwd, vars) => spawnSync('sh', ['-e', '-c', recipe], {
   cwd, encoding: 'utf8', env: { ...process.env, ...vars },
 });
 function fixture(body) {
-  const root = mkdtempSync(join(tmpdir(), 'pstack-shipping-'));
+  const root = mkdtempSync(join(tmpdir(), 'astack-shipping-'));
   try {
     run(root, 'init', '-b', 'main');
     run(root, 'config', 'user.email', 'fixture@example.invalid');

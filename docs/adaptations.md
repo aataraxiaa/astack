@@ -5,7 +5,7 @@ The maintained source is original PStack in cursor/plugins. The initial translat
 | Layer | Source of truth | Update behavior |
 | --- | --- | --- |
 | Original workflows | `tools/upstream.json` | Fetch original source at an immutable commit and compare with the previous pin. |
-| Mechanical translation | `tools/substitutions.json` | Apply named rewrites to both old and new source before three-way comparison. |
+| Mechanical translation | `tools/substitutions.json` | Apply named text rewrites and `pathRenames` to both old and new source before three-way comparison. |
 | Deliberate divergence | `tools/forks.json` | Preserve non-overlapping edits; fail validation on conflicts or undeclared differences. |
 | Maintenance instructions | `docs/maintenance.md`, `docs/maintenance-prompt.md`, `docs/workflow.md` | AStack owns the portable runbook, scheduler prompt, and diagrams. Host settings and credentials stay outside Git. |
 | Native packaging | Harness manifests, marketplaces, hooks, `tools/generate.mjs` | Share one skills tree and validate each harness's packaging. |
@@ -13,7 +13,9 @@ The maintained source is original PStack in cursor/plugins. The initial translat
 
 The bootstrap retains the port reference's declared policy forks as well as its mechanical compatibility work. Those are visible in `tools/forks.json`; they are not represented as original PStack behavior. Review them individually before changing them rather than silently discarding mature workflows.
 
-AStack uses the `astack:` plugin namespace and `astack-models.md` configuration. The upstream `poteto-mode` and `setup-pstack` skill names are retained to minimize path churn. Thus Claude invokes `/astack:poteto-mode` and `/astack:setup-pstack`.
+The `pathRenames` map translates upstream `skills/setup-pstack` into local `skills/setup-astack`. Substitution file scopes keep their upstream paths. Generation, fork declarations, and sync reports use local paths. Unsafe paths or colliding destinations stop sync before it writes.
+
+AStack uses the `astack:` plugin namespace and `astack-models.md` configuration. The main workflow keeps the `poteto-mode` name; model and routing setup uses `setup-astack`. Claude invokes `/astack:poteto-mode` and `/astack:setup-astack`. Mechanical branding and the setup directory rename are applied during upstream translation. Original PStack names remain in source attribution, upstream paths, and legacy checkpoint compatibility.
 
 The Codex adapter uses available tools and model capabilities rather than assuming that every Codex surface exposes the same tool names. User and project instructions take precedence over all plugin guidance.
 

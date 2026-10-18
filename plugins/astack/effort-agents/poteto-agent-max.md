@@ -1,6 +1,6 @@
 ---
 name: poteto-agent-max
-description: `astack:poteto-agent` at max reasoning effort. Dispatched in place of `astack:poteto-agent` when a pstack role's override names `@max`. The caller passes the model.
+description: `astack:poteto-agent` at max reasoning effort. Dispatched in place of `astack:poteto-agent` when an AStack role's override names `@max`. The caller passes the model.
 effort: max
 ---
 

@@ -1,5 +1,9 @@
 # AStack changes
 
+## 0.1.4 - Consistent AStack naming
+
+Rename model setup to `setup-astack` and use AStack consistently in agent descriptions, runtime guidance, packaging, and generated configuration. Update upstream translation so future imports retain the new command and directory names. New checkpoints use `astack/resume`; existing checkpoints remain readable from the legacy location. Preserve original source attribution, upstream URLs, and release history. Add regression checks for naming, mapped sync paths, and checkpoint compatibility.
+
 ## 0.1.3 - Original PStack 0.15.15
 
 Adapted original cursor/plugins/pstack at df581122cde17e6e27686b5a448bde23e4ad4318. Adds correct and portable poteto-help, including prompting and workflow recipes. Imports architectural review checks and ordered performance guidance. Retains native model configuration, session hooks, and relevant-defect testing policy. Updates the command catalog and generated shortcuts. No upstream files became port-only.

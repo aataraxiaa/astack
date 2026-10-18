@@ -7,8 +7,8 @@
     {
       "name": "astack",
       "source": "./plugins/astack",
-      "description": "PStack adapted for Claude Code and Codex.",
-      "version": "0.1.3"
+      "description": "AStack workflows for Claude Code and Codex.",
+      "version": "0.1.4"
     }
   ],
   "description": "AStack workflows for Claude Code and Codex."

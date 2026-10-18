@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Behavioral check for the pstack plugin layout (#22, CHANGES 0.9.13).
+# Behavioral check for the astack plugin layout (#22, CHANGES 0.9.13).
 #
 # Claude Code renders a plugin's commands AND its user-invocable skills in the
 # slash menu, so a command trampoline paired with a same-named skill shows the

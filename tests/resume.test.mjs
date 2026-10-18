@@ -1,8 +1,9 @@
 import { test } from 'bun:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
@@ -96,4 +97,41 @@ test('rejects symlink artifacts outside the project', () => fixture(({ run }) =>
   const result = run('publish', '--note', saved.note, '--artifact', saved.artifact);
   assert.equal(result.status, 1);
   assert.match(result.value.detail, /must belong to this project/);
+}));
+
+function legacyCheckpoint(project, git) {
+  const store = join(git('rev-parse', '--absolute-git-dir'), 'pstack', 'resume');
+  mkdirSync(store, { recursive: true });
+  const note = join(store, 'resume.md');
+  writeFileSync(note, 'Legacy checkpoint.\n');
+  writeFileSync(join(store, 'latest.json'), JSON.stringify({
+    schemaVersion: 1, gitDir: git('rev-parse', '--absolute-git-dir'),
+    worktree: project, branch: 'main', createdAt: '2026-10-17T00:00:00Z',
+    note: { path: note, sha256: createHash('sha256').update(readFileSync(note)).digest('hex') },
+    artifacts: [],
+  }));
+  return note;
+}
+
+test('new checkpoints use AStack storage and supersede readable legacy checkpoints', () => fixture(({ project, run, git }) => {
+  const legacy = legacyCheckpoint(project, git);
+  assert.equal(run('read').value.checkpoint.note.path, legacy);
+  const saved = note(run);
+  assert.ok(saved.note.includes('/astack/resume/'));
+  assert.equal(run('read').value.checkpoint.note.path, legacy);
+  assert.equal(run('publish', '--note', saved.note, '--artifact', saved.artifact).status, 0);
+  assert.equal(run('read').value.checkpoint.note.path, saved.note);
+  assert.equal(readFileSync(legacy, 'utf8'), 'Legacy checkpoint.\n');
+  writeFileSync(saved.note, 'damaged');
+  assert.equal(run('read').status, 1);
+}));
+
+test('legacy checkpoints remain available from another worktree and preserve integrity checks', () => fixture(({ project, run, git }) => {
+  const legacy = legacyCheckpoint(project, git);
+  const worktree = join(project, 'other-worktree');
+  git('worktree', 'add', '-b', 'other', worktree);
+  const cold = JSON.parse(execFileSync('node', [cli, 'read', '--project', worktree], { encoding: 'utf8' }));
+  assert.equal(cold.checkpoint.note.path, legacy);
+  writeFileSync(legacy, 'damaged');
+  assert.equal(run('read').status, 1);
 }));

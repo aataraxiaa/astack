@@ -89,7 +89,7 @@ The caller's usage is written first and the type sketch derived from it. One fil
 
 ## Models
 
-Role defaults, stamped from `plugins/astack/models.json` (edit there, rerun `tools/generate.mjs`). A matching role line in the `astack-models.md` override sheet overrides each at runtime; `/setup-pstack` writes it and lists its path per runtime.
+Role defaults, stamped from `plugins/astack/models.json` (edit there, rerun `tools/generate.mjs`). A matching role line in the `astack-models.md` override sheet overrides each at runtime; `/setup-astack` writes it and lists its path per runtime.
 
 - architect runners: `opus`, `fable`, `sonnet`
 

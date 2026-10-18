@@ -1,6 +1,6 @@
 # Resume storage
 
-Pause and pickup share one project locator. The `resume.mjs` command under `skills/poteto-mode/scripts/` resolves the project's Git common directory and stores checkpoints under its `pstack/resume/` directory. `latest.json` points to the latest complete checkpoint and records the worktree, branch, timestamp, note, and requested artifacts with content hashes.
+Pause and pickup share one project locator. The `resume.mjs` command under `skills/poteto-mode/scripts/` resolves the project's Git common directory and stores checkpoints under its `astack/resume/` directory. `latest.json` points to the latest complete checkpoint and records the worktree, branch, timestamp, note, and requested artifacts with content hashes.
 
 Claude Code, Codex, and other runtimes use this same command and location. Runtime-specific home directories and transcript encodings do not affect lookup. Git worktrees of the same repository share the locator, and Git excludes its contents from commits. This requires a local Git checkout whose common directory survives the interruption. It does not survive deleting or recloning the repository; transfer the complete checkpoint to durable storage before that happens and give the resumed session its locator.
 
@@ -14,6 +14,8 @@ Claude Code, Codex, and other runtimes use this same command and location. Runti
 `begin` separates concurrent writers' files. Publishing replaces one shared latest pointer atomically; the last complete publication wins. Keep the returned checkpoint paths when multiple tasks must remain separately resumable. The pointer is a locator, not a task scheduler or execution lock.
 
 ## Read a checkpoint
+
+For compatibility with earlier releases, `read` falls back to `pstack/resume/latest.json` only when `astack/resume/latest.json` is absent. Existing checkpoint files stay in place so their saved absolute paths and hashes remain valid. New checkpoints always use `astack/resume/`. An invalid new pointer is an error, not a reason to fall back to older state.
 
 Session pickup starts with `node <scripts>/resume.mjs read --project <worktree>` using only the project directory. Exit 0 with `kind: checkpoint` provides the saved note and all registered artifacts. Open them before searching transcripts. The command validates hashes and links again, including reuse of project artifacts.
 

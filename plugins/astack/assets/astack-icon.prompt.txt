@@ -1,3 +1,4 @@
+Original generation prompt, retained as asset provenance. The icon was generated for the pstack-claude portability source and is reused by AStack.
 Generated with the built-in image_gen tool, with transparent_background enabled.
 
 Use case: logo-brand
