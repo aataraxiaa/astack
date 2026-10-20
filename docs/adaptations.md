@@ -9,6 +9,7 @@ The maintained source is original PStack in cursor/plugins. The initial translat
 | Deliberate divergence | `tools/forks.json` | Preserve non-overlapping edits; fail validation on conflicts or undeclared differences. |
 | Maintenance instructions | `docs/maintenance.md`, `docs/maintenance-prompt.md`, `docs/workflow.md` | AStack owns the portable runbook, scheduler prompt, and diagrams. Host settings and credentials stay outside Git. |
 | Native packaging | Harness manifests, marketplaces, hooks, `tools/generate.mjs` | Share one skills tree and validate each harness's packaging. |
+| Public documentation and branding | `README.md`, `docs/assets/astack-logo.png` | AStack owns its installation guide and logo independently of upstream. |
 | Release identity | `VERSION`, `CHANGES.md`, `tools/provenance.json` | AStack uses its own semver and records the upstream version and commit separately. |
 
 The bootstrap retains the port reference's declared policy forks as well as its mechanical compatibility work. Those are visible in `tools/forks.json`; they are not represented as original PStack behavior. Review them individually before changing them rather than silently discarding mature workflows.
