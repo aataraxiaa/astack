@@ -8,7 +8,7 @@
       "name": "astack",
       "source": "./plugins/astack",
       "description": "AStack workflows for Claude Code and Codex.",
-      "version": "0.1.4"
+      "version": "0.1.5"
     }
   ],
   "description": "AStack workflows for Claude Code and Codex."

@@ -26,7 +26,7 @@ Infer the need from the message and the conversation. A named situation, such as
 Check the state that changes the answer, and mention it only when it does:
 
 - Read the current runtime’s override sheet at the path in [`setup-astack`](../setup-astack/SKILL.md). A missing sheet means role defaults apply; do not infer whether setup was previously run.
-- No `verify` or `verify-*` skill or other app harness in the project means agents have no scripted way to drive the app. Mention `/create-verification-skill` when the question is about proving a change works.
+- Apply [verification driver selection](../poteto-mode/references/verification-drivers.md) before recommending a new driver. An applicable installed plugin driver can supply verification without a project-local skill. Mention `/create-verification-skill` when no driver applies and the question is about proving a change works.
 
 When the override sheet is missing and it matters, ask whether the user wants to pick a model for each role and a reasoning effort now. It matters when the user is new, the question is about setup or cost, or the answer depends on which models run. Ask at most once per chat. If the need is also unclear, ask both questions together. Offer two choices:
 

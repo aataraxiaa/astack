@@ -14,12 +14,12 @@ const rules = [
   {
     source: "#71 callable driver policy",
     file: "poteto-mode/SKILL.md",
-    phrase: "fall back to `run` when the repo has none",
+    phrase: "select the driver using [verification driver selection](references/verification-drivers.md)",
   },
   {
     source: "#71 generated skill name",
     file: "create-verification-skill/SKILL.md",
-    phrase: "YAML frontmatter (`name: verify`",
+    phrase: "Name the local skill `verify` so Claude Code can invoke it",
   },
   {
     source: "#71 preserve the original generator trigger",
