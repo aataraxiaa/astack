@@ -21,3 +21,5 @@ AStack uses the `astack:` plugin namespace and `astack-models.md` configuration.
 The Codex adapter uses available tools and model capabilities rather than assuming that every Codex surface exposes the same tool names. User and project instructions take precedence over all plugin guidance.
 
 New functionality should be placed in the smallest applicable layer. Platform-specific preferences belong in the consuming project’s instructions. When fixing a portability defect, add a behavioral fixture to the existing tests and make the translation reproducible.
+
+AStack owns `plugins/astack/skills/poteto-mode/references/verification-drivers.md`. It centralizes instruction-based selection of local and installed plugin drivers and separates the active product checkout, editable driver source, and installed runtime cache. The creator, maintainer, help, and Codex mapping use this policy. External drivers stay in their own plugin source repository and use native installation.

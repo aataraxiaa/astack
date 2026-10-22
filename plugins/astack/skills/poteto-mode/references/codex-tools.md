@@ -42,12 +42,12 @@ A skills-only installation does not include plugin hooks. Request `poteto-mode` 
 
 ## Driver and bundled skills AStack references
 
-The [driver policy](../SKILL.md#non-negotiables) selects the app driver. For skills and drivers named by these workflows, use these Codex equivalents:
+The [verification driver selection policy](verification-drivers.md) selects the app driver, including applicable installed plugin skills. For skills and drivers named by these workflows, use these Codex equivalents:
 
 | Skill or driver named in AStack | On Codex |
 |---------------------------------|----------|
 | `run` (drive a CLI/TUI to see a change work) | Run the app yourself via `shell` and observe the real output. |
-| Project UI driver | Drive the UI with whatever automation you have, or hand the user a concrete manual check. Do not claim done without observing the artifact. |
+| App driver | Follow the selected local or installed plugin driver against the active product checkout. If none applies, use available UI automation or give the user a concrete manual check. Do not claim observed behavior from a manual handoff. |
 | `plugin-dev:skill-development` (Claude's SKILL.md authoring guidance) | Follow your platform's skill-authoring guidance; the `writing-skills` skill if present. Keep `name` + `description` frontmatter and progressive disclosure. |
 | `loop` (recurring/self-paced re-invocation, used by `babysit`) | Codex has no `loop` skill. For durable audits such as `/loop 1h`, use an available scheduled task with the requested cadence and authorization. Reuse an existing schedule when it already covers the work. If scheduling is unavailable, report that the audit is not armed. An active-session wait can support a bounded check but cannot replace a durable schedule. |
 
@@ -61,8 +61,8 @@ Affected skill entry points and the optional Codex slash stubs point here. Most 
 | `setup-astack` | The skill's Other runtimes table names the Codex sheet path and how it loads; the slugs are your Codex models (see Model names above). The role rows are identical. |
 | `no-comments` | There is no `comment-sicko` subagent type; see Subagent policy above. |
 | `teach` | Running `how` and `why` in parallel maps to `spawn_agent` fan-out; image generation uses the configured Codex equivalent. |
-| `create-verification-skill` | The generated skill lands under `.claude/skills/verify/` on Claude Code; write it to Codex's project-skill location instead. The app-driving harness is platform-neutral. |
-| `maintain-verification-skill` | The parallel per-feature source readers map to `spawn_agent` fan-out; the project-local skill lives under Codex's skills location, not `.claude/skills/`. |
+| `create-verification-skill` | Default to `.agents/skills/verify/` for a Codex project-local driver. An explicitly selected external plugin source destination stays external, with its unique skill name and feature map together. Native plugin installation supplies runtime discovery. |
+| `maintain-verification-skill` | The parallel per-feature source readers map to `spawn_agent` fan-out. Inspect `.agents/skills/` for local drivers. For installed plugin drivers, maintain the editable plugin source repository and leave the runtime cache unchanged. |
 | `babysit` | `loop` and `AskUserQuestion` resolve through the tables above. |
 | `automate-me` | `plugin-dev:skill-development` resolves through the skills table above. |
 | `architect` | The runner panel goes through the **arena** skill, so its `spawn_agent` fan-out and model substitution apply here too. |

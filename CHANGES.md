@@ -1,5 +1,9 @@
 # AStack changes
 
+## 0.1.5 - External verification drivers
+
+Select explicitly chosen verification drivers first, then applicable project-local or installed plugin drivers. Create external drivers in a selected plugin source repository, with their feature maps and helpers together. Maintain the editable driver source while driving the active product checkout; never edit installed caches or duplicate drivers into the product repository.
+
 ## 0.1.4 - Consistent AStack naming
 
 Rename model setup to `setup-astack` and use AStack consistently in agent descriptions, runtime guidance, packaging, and generated configuration. Update upstream translation so future imports retain the new command and directory names. New checkpoints use `astack/resume`; existing checkpoints remain readable from the legacy location. Preserve original source attribution, upstream URLs, and release history. Add regression checks for naming, mapped sync paths, and checkpoint compatibility.
