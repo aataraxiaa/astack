@@ -13,7 +13,7 @@ const skillsDir = fileURLToPath(new URL("../plugins/astack/skills", import.meta.
 const rules = [
   {
     source: "#71 callable driver policy",
-    file: "poteto-mode/SKILL.md",
+    file: "auto/SKILL.md",
     phrase: "select the driver using [verification driver selection](references/verification-drivers.md)",
   },
   {
@@ -33,27 +33,27 @@ const rules = [
   },
   {
     source: "#72 task fallback keeps skipped steps",
-    file: "poteto-mode/SKILL.md",
+    file: "auto/SKILL.md",
     phrase: "with the playbook steps verbatim and each `skip: <reason>` line",
   },
   {
     source: "#72 task fallback is a local checklist",
-    file: "poteto-mode/SKILL.md",
+    file: "auto/SKILL.md",
     phrase: "an uncommitted `todo.md` Markdown checklist",
   },
   {
     source: "#58 stop before you re-delegate",
-    file: "poteto-mode/SKILL.md",
+    file: "auto/SKILL.md",
     phrase: "Stop the abandoned agent first, and confirm it stopped.",
   },
   {
     source: "#58 delegate isolation",
-    file: "poteto-mode/playbooks/feature.md",
+    file: "auto/playbooks/feature.md",
     phrase: "Give every file-writing delegate its own worktree",
   },
   {
     source: "#59 item 1 drain the roster",
-    file: "poteto-mode/playbooks/opening-a-pr.md",
+    file: "auto/playbooks/opening-a-pr.md",
     phrase: "stop every one that holds it, including grandchildren you never launched",
   },
   {
@@ -83,17 +83,17 @@ const rules = [
   },
   {
     source: "#59 item 6 load the platform skill",
-    file: "poteto-mode/SKILL.md",
+    file: "auto/SKILL.md",
     phrase: "load that platform's skill",
   },
   {
     source: "#59 item 7 severity picks the artifact",
-    file: "poteto-mode/SKILL.md",
+    file: "auto/SKILL.md",
     phrase: "severity decides its artifact, not where it turned up",
   },
   {
     source: "#86 confirm the first status read",
-    file: "poteto-mode/playbooks/babysit.md",
+    file: "auto/playbooks/babysit.md",
     phrase: "confirm that the PR or stack it reports matches the request",
   },
 ];

@@ -45,7 +45,7 @@
     },
     {
       "pattern": "with the matching control skill, such as `control-cli` or `control-ui` from `cursor-team-kit`, or a named driver where none exists",
-      "replacement": "with the driver selected through poteto-mode's Non-negotiables, or a named available driver where none exists",
+      "replacement": "with the driver selected through auto's Non-negotiables, or a named available driver where none exists",
       "rationale": "Keep live verification while resolving drivers available in the active harness."
     },
     {
@@ -121,7 +121,7 @@
     },
     {
       "pattern": "run `scripts/worktree-audit.sh`",
-      "replacement": "run `skills/poteto-mode/scripts/worktree-audit.mjs` under the installed plugin",
+      "replacement": "run `skills/auto/scripts/worktree-audit.mjs` under the installed plugin",
       "rationale": "the port ships its own audit script; a skill-relative path does not resolve from the working directory"
     },
     {
@@ -146,12 +146,12 @@
     },
     {
       "pattern": "This playbook replaces Cursor's built-in babysit skill for these requests, so do not route there even though its description matches the same words.",
-      "replacement": "This playbook supersedes the bundled **babysit** skill for these requests, so do not route there even though its description matches the same words. `/babysit` stays the standalone entry point outside poteto-mode.",
+      "replacement": "This playbook supersedes the bundled **babysit** skill for these requests, so do not route there even though its description matches the same words. `/babysit` stays the standalone entry point outside auto.",
       "rationale": "the bundled babysit skill stays reachable by slash command; must precede the built-in babysit rule"
     },
     {
       "pattern": "status comes from `scripts/watch-pr/watch-pr`.",
-      "replacement": "status comes from the watcher at `skills/poteto-mode/scripts/watch-pr/watch-pr` under the installed plugin.",
+      "replacement": "status comes from the watcher at `skills/auto/scripts/watch-pr/watch-pr` under the installed plugin.",
       "rationale": "a skill-relative path does not resolve from the working directory"
     },
     {
@@ -181,12 +181,12 @@
     },
     {
       "pattern": "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-full.md`",
-      "replacement": "re-read this playbook from disk (`skills/poteto-mode/playbooks/autopilot-full.md` under the installed plugin)",
+      "replacement": "re-read this playbook from disk (`skills/auto/playbooks/autopilot-full.md` under the installed plugin)",
       "rationale": "the installed plugin, not an upstream checkout, is what the session runs"
     },
     {
       "pattern": "re-read this playbook from trunk with `git show origin/main:pstack/skills/poteto-mode/playbooks/autopilot-stack.md`",
-      "replacement": "re-read this playbook from disk (`skills/poteto-mode/playbooks/autopilot-stack.md` under the installed plugin)",
+      "replacement": "re-read this playbook from disk (`skills/auto/playbooks/autopilot-stack.md` under the installed plugin)",
       "rationale": "same, for the stack playbook"
     },
     {
@@ -242,7 +242,7 @@
     {
       "pattern": "control skill",
       "replacement": "driver skill",
-      "rationale": "driver selection lives in poteto-mode/SKILL.md Non-negotiables; preserve the older generator trigger in its local description"
+      "rationale": "driver selection lives in auto/SKILL.md Non-negotiables; preserve the older generator trigger in its local description"
     },
     {
       "pattern": "restart Cursor",
@@ -252,8 +252,8 @@
     {
       "regex": "\\(default `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\)",
       "files": "^skills/poteto-mode/playbooks/",
-      "replacement": "(default in poteto-mode's Models section)",
-      "rationale": "model defaults live in models.json and are stamped into Models sections, never hard-coded in prose; playbooks belong to poteto-mode"
+      "replacement": "(default in auto's Models section)",
+      "rationale": "model defaults live in models.json and are stamped into Models sections, never hard-coded in prose; playbooks belong to auto"
     },
     {
       "regex": "\\(default `(?:claude|gpt|grok|gemini|composer)-[^`]+`\\)",
@@ -329,7 +329,7 @@
     },
     {
       "pattern": "subagent_type: \"poteto-agent\"",
-      "replacement": "subagent_type: \"astack:poteto-agent\"",
+      "replacement": "subagent_type: \"astack:auto-agent\"",
       "rationale": "plugin agents register under the plugin namespace; the bare name errors (#58)"
     },
     {
@@ -429,8 +429,43 @@
     },
     {
       "pattern": "such as `pstack` or `poteto-mode`",
-      "replacement": "such as `astack` or `poteto-mode`",
+      "replacement": "such as `astack` or `auto`",
       "rationale": "Commit scope examples use this package name."
+    },
+    {
+      "replacement": "auto",
+      "rationale": "AStack exposes the local auto workflow names while retaining upstream source paths and attribution.",
+      "regex": "(?<!https?://[^\\s)<>`]*)(?<!github\\.com/[^\\s)<>`]*)poteto-mode"
+    },
+    {
+      "replacement": "auto-agent",
+      "rationale": "AStack exposes the local auto workflow names while retaining upstream source paths and attribution.",
+      "regex": "(?<!https?://[^\\s)<>`]*)(?<!github\\.com/[^\\s)<>`]*)poteto-agent"
+    },
+    {
+      "replacement": "auto-help",
+      "rationale": "AStack exposes the local auto workflow names while retaining upstream source paths and attribution.",
+      "regex": "(?<!https?://[^\\s)<>`]*)(?<!github\\.com/[^\\s)<>`]*)poteto-help"
+    },
+    {
+      "regex": "[Pp]oteto(?:’s|'s)",
+      "replacement": "AStack's",
+      "rationale": "Describe the local workflow without changing source attribution."
+    },
+    {
+      "replacement": "Auto",
+      "rationale": "Use the local workflow name in headings.",
+      "regex": "(?<!https?://[^\\s)<>`]*)(?<!github\\.com/[^\\s)<>`]*)Poteto"
+    },
+    {
+      "pattern": "any request for AStack's style",
+      "replacement": "any request for the AStack workflow",
+      "rationale": "Name the workflow instead of describing a personal style."
+    },
+    {
+      "pattern": "You are operating as auto's full agent style.",
+      "replacement": "You are following the AStack workflow.",
+      "rationale": "Describe the local workflow directly."
     }
   ],
   "denylist": [
@@ -448,19 +483,19 @@
     },
     {
       "token": "`verify` skill (UIs)",
-      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables"
+      "hint": "use the driver policy in auto/SKILL.md Non-negotiables"
     },
     {
       "token": "`verify` for UIs",
-      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables"
+      "hint": "use the driver policy in auto/SKILL.md Non-negotiables"
     },
     {
       "token": "control-cli",
-      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables; rewrite the sentence, don't token-swap"
+      "hint": "use the driver policy in auto/SKILL.md Non-negotiables; rewrite the sentence, don't token-swap"
     },
     {
       "token": "control-ui",
-      "hint": "use the driver policy in poteto-mode/SKILL.md Non-negotiables; rewrite the sentence, don't token-swap"
+      "hint": "use the driver policy in auto/SKILL.md Non-negotiables; rewrite the sentence, don't token-swap"
     },
     {
       "token": "AskQuestion",
@@ -528,6 +563,9 @@
     }
   ],
   "pathRenames": {
-    "skills/setup-pstack": "skills/setup-astack"
+    "skills/setup-pstack": "skills/setup-astack",
+    "skills/poteto-mode": "skills/auto",
+    "skills/poteto-help": "skills/auto-help",
+    "agents/poteto-agent.md": "agents/auto-agent.md"
   }
 }

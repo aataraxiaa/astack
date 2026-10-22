@@ -1,6 +1,6 @@
 {
   "name": "astack",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "AStack workflows for Claude Code and Codex.",
   "author": {
     "name": "AStack contributors"
@@ -13,17 +13,17 @@
     "skills"
   ],
   "agents": [
+    "./agents/auto-agent.md",
     "./agents/comment-sicko.md",
-    "./agents/poteto-agent.md",
+    "./effort-agents/auto-agent-high.md",
+    "./effort-agents/auto-agent-low.md",
+    "./effort-agents/auto-agent-max.md",
+    "./effort-agents/auto-agent-medium.md",
+    "./effort-agents/auto-agent-xhigh.md",
     "./effort-agents/effort-high.md",
     "./effort-agents/effort-low.md",
     "./effort-agents/effort-max.md",
     "./effort-agents/effort-medium.md",
-    "./effort-agents/effort-xhigh.md",
-    "./effort-agents/poteto-agent-high.md",
-    "./effort-agents/poteto-agent-low.md",
-    "./effort-agents/poteto-agent-max.md",
-    "./effort-agents/poteto-agent-medium.md",
-    "./effort-agents/poteto-agent-xhigh.md"
+    "./effort-agents/effort-xhigh.md"
   ]
 }

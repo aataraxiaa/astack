@@ -11,5 +11,5 @@
 *.code-workspace
 .claude/settings.local.json
 
-# bun deps for the vendored poteto-mode scripts (bootstrap.ts installs them on first run)
-plugins/astack/skills/poteto-mode/scripts/node_modules/
+# bun deps for the vendored auto scripts (bootstrap.ts installs them on first run)
+plugins/astack/skills/auto/scripts/node_modules/

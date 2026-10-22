@@ -10,8 +10,8 @@ Find each skill's instructions in the [skills tree](../plugins/astack/skills/).
 
 | command | use it when |
 | --- | --- |
-| `/poteto-mode` | default entry point for any non-trivial task |
-| `/poteto-help` | choose a workflow or get setup help without starting the work |
+| `/auto` | default entry point for any non-trivial task |
+| `/auto-help` | choose a workflow or get setup help without starting the work |
 | `/how` | walk through how a subsystem works |
 | `/why` | investigate why something was built this way (parallel multi-MCP evidence) |
 | `/architect` | settle types and module shape before writing code that crosses a function boundary |
@@ -51,7 +51,7 @@ Claude Code and Codex share one skills tree and have native manifests and routin
 
 ### Codex
 
-Use the native marketplace installation in the [README](../README.md#codex). Request an installed skill by name. The [Codex mapping](../plugins/astack/skills/poteto-mode/references/codex-tools.md) maps workflow actions to available capabilities. Optional prompt stubs live in `.codex-plugin/prompts`; they are not required for native skill discovery.
+Use the native marketplace installation in the [README](../README.md#codex). Request an installed skill by name. The [Codex mapping](../plugins/astack/skills/auto/references/codex-tools.md) maps workflow actions to available capabilities. Optional prompt stubs live in `.codex-plugin/prompts`; they are not required for native skill discovery.
 
 ### Automatic routing
 

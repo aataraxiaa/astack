@@ -68,18 +68,18 @@ describe("static plugin invariants", () => {
 
   test("a skill dispatching a plugin agent by its bare name fails and names the site", () => {
     const root = plugin((r) => {
-      agent(r, "poteto-agent");
-      skill(r, "caller", "", 'Spawn with `subagent_type: "poteto-agent"`.\n');
+      agent(r, "auto-agent");
+      skill(r, "caller", "", 'Spawn with `subagent_type: "auto-agent"`.\n');
     });
     expect(() => check(root)).toThrow(
-      'skills/caller/SKILL.md:6: subagent_type: "poteto-agent" (use "astack:poteto-agent")',
+      'skills/caller/SKILL.md:6: subagent_type: "auto-agent" (use "astack:auto-agent")',
     );
   });
 
   test("a skill dispatching a plugin agent by its namespaced name passes", () => {
     const root = plugin((r) => {
-      agent(r, "poteto-agent");
-      skill(r, "caller", "", 'Spawn with `subagent_type: "astack:poteto-agent"`.\n');
+      agent(r, "auto-agent");
+      skill(r, "caller", "", 'Spawn with `subagent_type: "astack:auto-agent"`.\n');
     });
     expect(() => check(root)).not.toThrow();
   });

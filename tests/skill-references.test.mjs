@@ -1,5 +1,5 @@
 // Skills name each other in prose, not links: "the **how** skill", "the
-// **laziness-protocol** principle skill", "(**principle-x**)" in poteto-mode's
+// **laziness-protocol** principle skill", "(**principle-x**)" in auto's
 // index, and "`/name`" slash forms. Nothing resolved them until now, so a
 // renamed directory left dangling references no tool could see.
 import { describe, expect, test } from "bun:test";
@@ -41,8 +41,8 @@ describe("prose skill references", () => {
     expect(dangling).toEqual([]);
   });
 
-  test("poteto-mode's Principles index lists exactly the principle leaves", () => {
-    const index = readFileSync(join(skillsDir, "poteto-mode/SKILL.md"), "utf8");
+  test("auto's Principles index lists exactly the principle leaves", () => {
+    const index = readFileSync(join(skillsDir, "auto/SKILL.md"), "utf8");
     const listed = new Set([...index.matchAll(/\(\*\*(principle-[a-z0-9-]+)\*\*\)/g)].map((m) => m[1]));
     expect([...listed].sort()).toEqual([...principles].sort());
   });

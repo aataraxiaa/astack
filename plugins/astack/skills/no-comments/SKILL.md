@@ -5,7 +5,7 @@ description: "Spawn the comment-sicko subagent, fix accepted findings, and offer
 
 # No comments
 
-On Codex, read the [platform mapping](../poteto-mode/references/codex-tools.md), including its per-skill notes, before following this skill.
+On Codex, read the [platform mapping](../auto/references/codex-tools.md), including its per-skill notes, before following this skill.
 
 Spawn comment-sicko. Act on accepted findings.
 

@@ -26,16 +26,16 @@ import { validateProsePaths, validateSkillsTree, walk } from "../tools/validate-
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const skillsDir = join(repoRoot, "plugins/astack/skills");
 const requiredPortableFiles = [
-  "poteto-mode/references/agents/comment-sicko.md",
-  "poteto-mode/references/licenses/LICENSE",
-  "poteto-mode/references/licenses/LICENSE-cursor-team-kit",
-  "poteto-mode/references/licenses/NOTICE.md",
+  "auto/references/agents/comment-sicko.md",
+  "auto/references/licenses/LICENSE",
+  "auto/references/licenses/LICENSE-cursor-team-kit",
+  "auto/references/licenses/NOTICE.md",
 ];
 
 describe("shared Agent Skills tree", () => {
-  test("public skills include poteto-mode and exclude every principle leaf", () => {
+  test("public skills include auto and exclude every principle leaf", () => {
     const names = publicSkills(skillsDir);
-    expect(names).toContain("poteto-mode");
+    expect(names).toContain("auto");
     expect(names.some((n) => n.startsWith("principle-"))).toBe(false);
   });
 
@@ -231,11 +231,11 @@ describe("shared Agent Skills tree", () => {
         symlinkSync(join(skillsDir, name), join(installed, name), "dir");
       }
 
-      const poteto = join(installed, "poteto-mode");
+      const auto = join(installed, "auto");
       for (const file of [
-        join(poteto, "SKILL.md"),
-        join(poteto, "references", "codex-tools.md"),
-        join(poteto, "..", "principle-model-the-domain", "SKILL.md"),
+        join(auto, "SKILL.md"),
+        join(auto, "references", "codex-tools.md"),
+        join(auto, "..", "principle-model-the-domain", "SKILL.md"),
       ]) {
         expect(readFileSync(file, "utf8").length).toBeGreaterThan(0);
       }

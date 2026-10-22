@@ -4,9 +4,9 @@ import { chmodSync, mkdirSync, mkdtempSync, realpathSync, rmSync, utimesSync, wr
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
-import { audit, classify } from "../plugins/astack/skills/poteto-mode/scripts/worktree-audit.mjs";
+import { audit, classify } from "../plugins/astack/skills/auto/scripts/worktree-audit.mjs";
 
-const script = join(import.meta.dir, "../plugins/astack/skills/poteto-mode/scripts/worktree-audit.mjs");
+const script = join(import.meta.dir, "../plugins/astack/skills/auto/scripts/worktree-audit.mjs");
 
 const known = (value) => ({ known: true, value });
 const unknown = { known: false };

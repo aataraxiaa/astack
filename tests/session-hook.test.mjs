@@ -71,7 +71,7 @@ describe("SessionStart hook", () => {
   test("names only skills that exist", () => {
     const named = [...mandate.matchAll(/(?:astack:|`\/)([a-z0-9-]+)/g)].map((m) => m[1]);
     const skills = new Set(agentSkills(join(pluginRoot, "skills")).map(({ name }) => name));
-    expect(named).toContain("poteto-mode");
+    expect(named).toContain("auto");
     expect(named.filter((name) => !skills.has(name))).toEqual([]);
   });
 
