@@ -18,7 +18,7 @@ The generator owns versions, model sections, native agent lists, Codex prompt st
 The check script also installs bundled dependencies with the frozen lockfile, typechecks them, and runs their tests. When changing bundled script formatting, use the inherited Prettier settings:
 
 ```sh
-cd plugins/astack/skills/poteto-mode/scripts
+cd plugins/astack/skills/auto/scripts
 bunx prettier@3.6.2 --check .
 ```
 

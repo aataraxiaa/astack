@@ -1,7 +1,7 @@
 <EXTREMELY_IMPORTANT>
 You have AStack.
 
-Invoke the `astack:poteto-mode` skill and follow its instructions when a task meets any of these:
+Invoke the `astack:auto` skill and follow its instructions when a task meets any of these:
 
 - it touches more than one file, or changes a signature other files call
 - it involves a design or architecture choice
@@ -11,5 +11,5 @@ It routes to the right AStack skill from there. For smaller tasks, such as a con
 
 When the intent is already specific, enter that skill directly: `astack:tdd`, `astack:architect`, `astack:how`, `astack:why`, `astack:arena`, `astack:interrogate`.
 
-User instructions (CLAUDE.md, AGENTS.md, direct requests) take precedence. Other session-start mandates, such as superpowers, still apply. Their skill checks run as before, and when a task meets the criteria above they route implementation through poteto-mode.
+User instructions (CLAUDE.md, AGENTS.md, direct requests) take precedence. Other session-start mandates, such as superpowers, still apply. Their skill checks run as before, and when a task meets the criteria above they route implementation through auto.
 </EXTREMELY_IMPORTANT>

@@ -6,7 +6,7 @@
 
 Workflows for Claude Code and Codex, adapted from [Lauren Tan's PStack](https://github.com/cursor/plugins/tree/main/pstack).
 
-AStack gives your coding agent reusable skills for planning changes, fixing bugs, reviewing code, and verifying results. Start with `poteto-mode` to select a workflow for your task, or invoke a specific skill.
+AStack gives your coding agent reusable skills for planning changes, fixing bugs, reviewing code, and verifying results. Start with `auto` to select a workflow for your task, or invoke a specific skill.
 
 [Install](#install) · [Get started](#get-started) · [Skill catalog](docs/reference.md) · [Contributing](CONTRIBUTING.md)
 
@@ -49,20 +49,20 @@ See the [Claude Code installation guide](https://code.claude.com/docs/en/discove
 In Claude Code, include the workflow command with your request:
 
 ```text
-/astack:poteto-mode Add pagination to the search results.
+/astack:auto Add pagination to the search results.
 ```
 
 In Codex, request the installed skill by name:
 
 ```text
-Use AStack's poteto-mode skill to add pagination to the search results.
+Use AStack's auto skill to add pagination to the search results.
 ```
 
 For a specific task, choose a skill directly:
 
 | Task | Skill |
 | --- | --- |
-| Choose a workflow or get setup help | `poteto-help` |
+| Choose a workflow or get setup help | `auto-help` |
 | Understand existing code | `how` |
 | Plan types and module structure | `architect` |
 | Fix a bug with a failing test first | `tdd` |

@@ -5,7 +5,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
-const mergeSafety = readFileSync(new URL('../plugins/astack/skills/poteto-mode/references/merge-safety.md', import.meta.url), 'utf8');
+const mergeSafety = readFileSync(new URL('../plugins/astack/skills/auto/references/merge-safety.md', import.meta.url), 'utf8');
 const recipe = [...mergeSafety.matchAll(/^```sh\n([\s\S]*?)^```$/gm)]
   .map((m) => m[1]).find((block) => block.includes('git rebase'));
 if (!recipe) throw new Error('merge-safety.md has no restack recipe');

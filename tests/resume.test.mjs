@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
-const cli = fileURLToPath(new URL('../plugins/astack/skills/poteto-mode/scripts/resume.mjs', import.meta.url));
+const cli = fileURLToPath(new URL('../plugins/astack/skills/auto/scripts/resume.mjs', import.meta.url));
 function fixture(body) {
   // resume.mjs reports resolved paths; macOS tmpdir() sits behind the /var symlink.
   const project = realpathSync(mkdtempSync(join(tmpdir(), 'resume-project-')));

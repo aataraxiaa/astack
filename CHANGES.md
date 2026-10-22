@@ -1,5 +1,11 @@
 # AStack changes
 
+## 0.1.6 - Rename the main workflow to auto
+
+The main workflow is now `auto`, its routing wrapper and effort variants are `auto-agent` and `auto-agent-<level>`, and setup guidance is `auto-help`. AStack keeps its plugin and package identity. Hooks, generated references, build paths, and upstream translation use the new local names.
+
+Migration: replace `poteto-mode`, `poteto-agent` (including effort variants), and `poteto-help` in saved prompts and project instructions with `auto`, `auto-agent`, and `auto-help`. Old invocations have no alias. Start a fresh session after refreshing the plugin so its routing instructions use the new names.
+
 ## 0.1.5 - External verification drivers
 
 Select explicitly chosen verification drivers first, then applicable project-local or installed plugin drivers. Create external drivers in a selected plugin source repository, with their feature maps and helpers together. Maintain the editable driver source while driving the active product checkout; never edit installed caches or duplicate drivers into the product repository.

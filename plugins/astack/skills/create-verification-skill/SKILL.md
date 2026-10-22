@@ -5,9 +5,9 @@ description: "Generate a project-local or explicitly requested external plugin v
 
 # Create a verification skill
 
-On Codex, read the [platform mapping](../poteto-mode/references/codex-tools.md), including its per-skill notes, before following this skill.
+On Codex, read the [platform mapping](../auto/references/codex-tools.md), including its per-skill notes, before following this skill.
 
-Generate a skill that launches the real app, drives a user path, and captures evidence. First apply [verification driver selection](../poteto-mode/references/verification-drivers.md) to avoid duplicating an existing driver.
+Generate a skill that launches the real app, drives a user path, and captures evidence. First apply [verification driver selection](../auto/references/verification-drivers.md) to avoid duplicating an existing driver.
 
 Default to `.claude/skills/verify/` in the product repository, or the touched package in a monorepo. Name the local skill `verify` so Claude Code can invoke it instead of its bundled user-only `/verify`. On Codex, use the location in the platform mapping.
 

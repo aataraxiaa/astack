@@ -53,6 +53,6 @@ flowchart LR
     W --> E["Code changes<br/>and verification evidence"]
 ```
 
-In Claude Code, request `/astack:poteto-mode` followed by the task. In Codex, ask to use AStack's `poteto-mode` skill. You can also request a focused skill such as `architect`, `interrogate`, or `bro`.
+In Claude Code, request `/astack:auto` followed by the task. In Codex, ask to use AStack's `auto` skill. You can also request a focused skill such as `architect`, `interrogate`, or `bro`.
 
 Plugin use does not require running the maintenance schedule. Publishing a release does not update an existing agent session. Refresh the installed plugin and reload the session using the host's supported installation flow.

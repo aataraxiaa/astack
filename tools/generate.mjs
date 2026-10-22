@@ -19,9 +19,9 @@
 //   available slugs, Codex equivalents)
 //     -> each model-consuming skill's "## Models" and "## Reasoning effort" sections
 //     -> setup-astack's Models section and override-sheet block, and interrogate's reviewer table
-//     -> the "## Model names" section of poteto-mode/references/codex-tools.md
+//     -> the "## Model names" section of auto/references/codex-tools.md
 //     -> one effort agent pair per level in plugins/astack/effort-agents/
-//   the Per-skill notes table in poteto-mode/references/codex-tools.md
+//   the Per-skill notes table in auto/references/codex-tools.md
 //     -> the Codex preamble under the first heading of each listed skill's SKILL.md,
 //        and the codex-tools.md pointer in the prompt stub of every other public skill
 //   DRIVER_PLAYBOOKS -> the driver-skill line under each playbook's first heading
@@ -30,7 +30,7 @@
 //     agents/ directory, so it names every agent)
 //   plugins/astack/agents/comment-sicko.md, LICENSE, LICENSE-cursor-team-kit,
 //   and NOTICE-skills.md
-//     -> portable copies under poteto-mode/references/{agents,licenses}/
+//     -> portable copies under auto/references/{agents,licenses}/
 //   No other model name (a claude-* ID or a backticked family name) may appear
 //   in skill prose; the scan below fails on strays.
 //
@@ -70,14 +70,14 @@ const VERSIONED_MANIFESTS = [
 export const PORTABLE_ASSETS = [
   {
     source: "plugins/astack/agents/comment-sicko.md",
-    target: "poteto-mode/references/agents/comment-sicko.md",
+    target: "auto/references/agents/comment-sicko.md",
   },
-  { source: "LICENSE", target: "poteto-mode/references/licenses/LICENSE" },
+  { source: "LICENSE", target: "auto/references/licenses/LICENSE" },
   {
     source: "LICENSE-cursor-team-kit",
-    target: "poteto-mode/references/licenses/LICENSE-cursor-team-kit",
+    target: "auto/references/licenses/LICENSE-cursor-team-kit",
   },
-  { source: "NOTICE-skills.md", target: "poteto-mode/references/licenses/NOTICE.md" },
+  { source: "NOTICE-skills.md", target: "auto/references/licenses/NOTICE.md" },
 ];
 
 // The generator removes every entry of these directories that no planned path
@@ -85,8 +85,8 @@ export const PORTABLE_ASSETS = [
 export const OWNED_DIRS = [
   PROMPTS,
   EFFORT_AGENTS,
-  `${SKILLS}/poteto-mode/references/agents`,
-  `${SKILLS}/poteto-mode/references/licenses`,
+  `${SKILLS}/auto/references/agents`,
+  `${SKILLS}/auto/references/licenses`,
 ];
 
 // Replace the manifest's single "version" value, preserving all formatting.
@@ -168,7 +168,7 @@ export function agentSkills(skillsDir) {
       throw new Error(`${path}: disable-model-invocation: true breaks model-initiated entry (CHANGES 0.9.8)`);
     }
     const userInvocable = front["user-invocable"] !== false;
-    // CHANGES 0.9.9: principle leaves are read by path from poteto-mode and
+    // CHANGES 0.9.9: principle leaves are read by path from auto and
     // stay out of the slash menu.
     if (name.startsWith("principle-") && userInvocable) {
       throw new Error(`${path}: principle leaves carry user-invocable: false (CHANGES 0.9.9)`);
@@ -275,7 +275,7 @@ export function promptStub({ name, menu }, { preamble } = {}) {
   const pointer = preamble
     ? ""
     : " Resolve Claude tool names, Claude model names, and Claude built-in skills through " +
-      "`poteto-mode/references/codex-tools.md`, including its Per-skill notes.";
+      "`auto/references/codex-tools.md`, including its Per-skill notes.";
   return (
     `---\nname: ${name}\ndescription: ${menu}\ndisable-model-invocation: true\n---\n\n` +
     `Invoke the \`${name}\` skill and follow it.${pointer}\n`
@@ -377,7 +377,7 @@ export function regions(models) {
       render: () => [overrideSheetBlock(models)],
     },
     {
-      file: "plugins/astack/skills/poteto-mode/references/codex-tools.md",
+      file: "plugins/astack/skills/auto/references/codex-tools.md",
       name: "Model names section",
       locate: section("Model names"),
       render: () => blankPadded(codexModelNamesSection(models)),
@@ -385,11 +385,11 @@ export function regions(models) {
   ];
 }
 
-const CODEX_TOOLS = `${SKILLS}/poteto-mode/references/codex-tools.md`;
+const CODEX_TOOLS = `${SKILLS}/auto/references/codex-tools.md`;
 const CODEX_NOTES_HEADER = "| Skill | On Codex |";
 const CODEX_PREAMBLE =
-  "On Codex, read the [platform mapping](../poteto-mode/references/codex-tools.md), including its per-skill notes, before following this skill.";
-const DRIVER_LINE = "Resolve the driver skill through [poteto-mode's Non-negotiables](../SKILL.md#non-negotiables).";
+  "On Codex, read the [platform mapping](../auto/references/codex-tools.md), including its per-skill notes, before following this skill.";
+const DRIVER_LINE = "Resolve the driver skill through [auto's Non-negotiables](../SKILL.md#non-negotiables).";
 const DRIVER_PLAYBOOKS = ["autopilot-full", "multi-phase-plan", "orchestrate", "refactoring", "shipping"];
 
 // The skills with a row in the Codex mapping's Per-skill notes table, in row order.
@@ -414,7 +414,7 @@ export function loadLeadLines(root = repo) {
     if (!existsSync(join(root, file))) throw new Error(`${CODEX_TOOLS}: per-skill note for "${skill}", which has no SKILL.md`);
     leads.set(file, CODEX_PREAMBLE);
   }
-  for (const playbook of DRIVER_PLAYBOOKS) leads.set(`${SKILLS}/poteto-mode/playbooks/${playbook}.md`, DRIVER_LINE);
+  for (const playbook of DRIVER_PLAYBOOKS) leads.set(`${SKILLS}/auto/playbooks/${playbook}.md`, DRIVER_LINE);
   return leads;
 }
 
@@ -601,19 +601,19 @@ export function effortSection(levels, defaultEffort) {
     "is the usual one. Strip the suffix before reading the model: `inherit-parent` or `auto` still omits `model` " +
     "at every level, and a model name is passed as `model`. " +
     "On Claude Code, a level picks the effort agent from the `subagent_type` you would otherwise use. " +
-    "`astack:poteto-agent` becomes `subagent_type: \"astack:poteto-agent-<level>\"`. " +
+    "`astack:auto-agent` becomes `subagent_type: \"astack:auto-agent-<level>\"`. " +
     "`general-purpose`, or no `subagent_type`, becomes `subagent_type: \"astack:effort-<level>\"`. " +
     "The effort agents set only `effort`, so the model you pass still decides the model. " +
     "On Codex, pass the level as `spawn_agent`'s `reasoning_effort` and keep the usual instructions."
   );
 }
 
-// The effort agents: one general-purpose worker and one poteto-agent per level.
-// The poteto variants carry poteto-agent's body. Their descriptions name
-// astack:poteto-agent instead of copying its routing contract, so only the
-// base agent reads as the routing target for /poteto-mode.
-export function effortAgents(levels, potetoAgent) {
-  const { body } = parseFrontmatter(potetoAgent);
+// The effort agents: one general-purpose worker and one auto-agent per level.
+// The auto variants carry auto-agent's body. Their descriptions name
+// astack:auto-agent instead of copying its routing contract, so only the
+// base agent reads as the routing target for /auto.
+export function effortAgents(levels, autoAgent) {
+  const { body } = parseFrontmatter(autoAgent);
   return levels.flatMap((level) => [
     {
       name: `effort-${level}`,
@@ -626,10 +626,10 @@ export function effortAgents(levels, potetoAgent) {
         "The effort level changes how long you reason, not the task.\n",
     },
     {
-      name: `poteto-agent-${level}`,
+      name: `auto-agent-${level}`,
       text:
-        `---\nname: poteto-agent-${level}\ndescription: \`astack:poteto-agent\` at ${level} reasoning effort. ` +
-        `Dispatched in place of \`astack:poteto-agent\` when an AStack role's override names \`@${level}\`. The caller passes the model.\n` +
+        `---\nname: auto-agent-${level}\ndescription: \`astack:auto-agent\` at ${level} reasoning effort. ` +
+        `Dispatched in place of \`astack:auto-agent\` when an AStack role's override names \`@${level}\`. The caller passes the model.\n` +
         `effort: ${level}\n---\n` + body,
     },
   ]);
@@ -677,7 +677,7 @@ export function overrideSheetBlock(models) {
     "A model may carry a reasoning effort, as in `opus @xhigh` (levels: " + models.efforts.join(", ") + "); " +
     "the role then runs through the AStack effort agent of that level, each entry of a panel list on its own. " +
     "`default effort` sets the level for a value without one; `session` keeps the parent session's effort. " +
-    "`session hook: off` stops the Claude Code or Codex SessionStart hook from injecting the poteto-mode mandate; " +
+    "`session hook: off` stops the Claude Code or Codex SessionStart hook from injecting the auto mandate; " +
     "any other value, or no line, leaves it on.\n\n" +
     rows +
     `\n\ndefault effort: ${models.defaultEffort}\nsession hook: on`
@@ -783,7 +783,7 @@ export function plan(root, models) {
     const preamble = leads.get(`${SKILLS}/${skill.name}/SKILL.md`) === CODEX_PREAMBLE;
     put(`${PROMPTS}/${skill.name}.md`, promptStub(skill, { preamble }));
   }
-  const agents = effortAgents(models.efforts, read(`${PLUGIN}/agents/poteto-agent.md`));
+  const agents = effortAgents(models.efforts, read(`${PLUGIN}/agents/auto-agent.md`));
   for (const agent of agents) put(`${EFFORT_AGENTS}/${agent.name}.md`, agent.text);
   stamp(`${PLUGIN}/.claude-plugin/plugin.json`, (text) =>
     stampAgentPaths(text, [

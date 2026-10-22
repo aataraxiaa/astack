@@ -5,7 +5,7 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 // The one directory walker for every tool in tools/. `node_modules` under
-// poteto-mode/scripts is gitignored but present on any machine that ran the
+// auto/scripts is gitignored but present on any machine that ran the
 // vendored tooling's install, and its READMEs are not ours to validate.
 export const SKIPPED_DIRS = new Set([".git", "node_modules"]);
 

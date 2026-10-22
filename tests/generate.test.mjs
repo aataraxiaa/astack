@@ -326,10 +326,10 @@ describe("slashCommands", () => {
     }
   });
 
-  test("the live reference names exactly the public skills, poteto-mode first", () => {
+  test("the live reference names exactly the public skills, auto first", () => {
     const text = readFileSync(join(repoRoot, "docs/reference.md"), "utf8");
     const rows = slashCommands(text, publicSkills(join(repoRoot, "plugins/astack/skills")));
-    expect(rows[0].name).toBe("poteto-mode");
+    expect(rows[0].name).toBe("auto");
   });
 });
 
@@ -430,7 +430,7 @@ describe("deriveSkill", () => {
   });
 
   test("stamps a file's lead line in its own paragraph under the first heading", () => {
-    for (const file of ["plugins/astack/skills/teach/SKILL.md", "plugins/astack/skills/poteto-mode/playbooks/refactoring.md"]) {
+    for (const file of ["plugins/astack/skills/teach/SKILL.md", "plugins/astack/skills/auto/playbooks/refactoring.md"]) {
       const text = "---\nname: teach\ndescription: d\n---\n\n# Title\n\nbody\n";
       const out = deriveSkill(file, text, models, leads);
       expect(out).toBe(text.replace("# Title\n\n", `# Title\n\n${leads.get(file)}\n\n`));
@@ -461,7 +461,7 @@ describe("lead lines", () => {
   });
 
   test("a prompt stub points at codex-tools.md unless its skill carries the Codex preamble", () => {
-    const pointer = "through `poteto-mode/references/codex-tools.md`, including its Per-skill notes.";
+    const pointer = "through `auto/references/codex-tools.md`, including its Per-skill notes.";
     expect(promptStub({ name: "tdd", menu: "m" }, { preamble: false })).toContain(pointer);
     expect(promptStub({ name: "how", menu: "m" }, { preamble: true })).toBe(
       "---\nname: how\ndescription: m\ndisable-model-invocation: true\n---\n\nInvoke the `how` skill and follow it.\n",
@@ -483,11 +483,11 @@ describe("lead lines", () => {
 });
 
 describe("effort agents", () => {
-  const poteto = "---\nname: poteto-agent\ndescription: Routing contract.\n---\n\n# Poteto subagent\n\nRead the skill.\n";
-  const agents = effortAgents(["high", "max"], poteto);
+  const auto = "---\nname: auto-agent\ndescription: Routing contract.\n---\n\n# Auto subagent\n\nRead the skill.\n";
+  const agents = effortAgents(["high", "max"], auto);
 
-  test("one general-purpose and one poteto agent per level, each setting only effort", () => {
-    expect(agents.map((a) => a.name)).toEqual(["effort-high", "poteto-agent-high", "effort-max", "poteto-agent-max"]);
+  test("one general-purpose and one auto agent per level, each setting only effort", () => {
+    expect(agents.map((a) => a.name)).toEqual(["effort-high", "auto-agent-high", "effort-max", "auto-agent-max"]);
     for (const agent of agents) {
       const level = agent.name.split("-").at(-1);
       expect(agent.text).toContain(`\nname: ${agent.name}\n`);
@@ -496,14 +496,14 @@ describe("effort agents", () => {
     }
   });
 
-  test("the poteto variant carries poteto-agent's body verbatim", () => {
-    expect(agents[1].text.endsWith("---\n\n# Poteto subagent\n\nRead the skill.\n")).toBe(true);
+  test("the auto variant carries auto-agent's body verbatim", () => {
+    expect(agents[1].text.endsWith("---\n\n# Auto subagent\n\nRead the skill.\n")).toBe(true);
     expect(agents[1].text.match(/^---$/gm)).toHaveLength(2);
   });
 
-  test("the poteto variant's description defers to astack:poteto-agent rather than copying its routing contract", () => {
+  test("the auto variant's description defers to astack:auto-agent rather than copying its routing contract", () => {
     const description = agents[1].text.match(/^description: (.*)$/m)[1];
-    expect(description).toContain("in place of `astack:poteto-agent`");
+    expect(description).toContain("in place of `astack:auto-agent`");
     expect(description).not.toContain("Routing contract.");
   });
 
@@ -511,7 +511,7 @@ describe("effort agents", () => {
 
   test("plugin.json lists both hand-written and generated agents", () => {
     const listed = JSON.parse(readFileSync(join(pluginRoot, ".claude-plugin/plugin.json"), "utf8")).agents;
-    expect(listed).toContain("./agents/poteto-agent.md");
+    expect(listed).toContain("./agents/auto-agent.md");
     expect(listed).toContain("./effort-agents/effort-high.md");
   });
 
@@ -526,7 +526,7 @@ describe("effort agents", () => {
     const text = effortSection(["low", "max"], "high");
     for (const level of ["low", "max", "high"]) expect(text).toContain(`\`${level}\``);
     expect(text).toContain('subagent_type: "astack:effort-<level>"');
-    expect(text).toContain('subagent_type: "astack:poteto-agent-<level>"');
+    expect(text).toContain('subagent_type: "astack:auto-agent-<level>"');
     expect(text).toContain("`reasoning_effort`");
   });
 });
@@ -686,13 +686,13 @@ describe("plan, changes, apply", () => {
     const cases = [
       [
         PORTABLE_ASSETS,
-        { source: "NOTICE-skills.md", target: "poteto-mode/references/NOTICE.md" },
-        "plugins/astack/skills/poteto-mode/references/NOTICE.md is not directly inside a generator-owned directory",
+        { source: "NOTICE-skills.md", target: "auto/references/NOTICE.md" },
+        "plugins/astack/skills/auto/references/NOTICE.md is not directly inside a generator-owned directory",
       ],
       [
         PORTABLE_ASSETS,
-        { source: "LICENSE", target: "poteto-mode/references/licenses/old/LICENSE" },
-        "plugins/astack/skills/poteto-mode/references/licenses/old/LICENSE is not directly inside a generator-owned directory",
+        { source: "LICENSE", target: "auto/references/licenses/old/LICENSE" },
+        "plugins/astack/skills/auto/references/licenses/old/LICENSE is not directly inside a generator-owned directory",
       ],
       [
         OWNED_DIRS,
@@ -748,7 +748,7 @@ describe("plan, changes, apply", () => {
   });
 
   test("plan refuses a path two producers write whole with different text", () => {
-    const target = "poteto-mode/references/licenses/LICENSE";
+    const target = "auto/references/licenses/LICENSE";
     PORTABLE_ASSETS.push({ source: "NOTICE-skills.md", target });
     try {
       expect(() => plan(repoRoot)).toThrow(`plugins/astack/skills/${target} is planned twice with different text`);
@@ -761,7 +761,7 @@ describe("plan, changes, apply", () => {
     const root = repoCopy();
     const [, preamble] = [...loadLeadLines(root)].find(([, line]) => line.startsWith("On Codex"));
     append(root, "plugins/astack/skills/tdd/SKILL.md", `\n${preamble}\n`);
-    const codexTools = "plugins/astack/skills/poteto-mode/references/codex-tools.md";
+    const codexTools = "plugins/astack/skills/auto/references/codex-tools.md";
     writeFileSync(join(root, codexTools), readFileSync(join(root, codexTools), "utf8").replace(/^\| `why` \|.*\n/m, ""));
     const failures = problems(root).filter((f) => f.startsWith("generator-owned lead lines"));
     expect(failures).toHaveLength(1);
@@ -773,7 +773,7 @@ describe("plan, changes, apply", () => {
     const root = repoCopy();
     append(root, ...STRAY_SLUG);
     append(root, "plugins/astack/skills/deslop/SKILL.md", "\n[gone](missing.md)\n");
-    append(root, "plugins/astack/skills/unslop/SKILL.md", '\nsubagent_type: "poteto-agent"\n');
+    append(root, "plugins/astack/skills/unslop/SKILL.md", '\nsubagent_type: "auto-agent"\n');
     const failures = problems(root);
     expect(failures).toEqual([
       expect.stringContaining("plugins/astack/skills/tdd/SKILL.md:"),
@@ -787,7 +787,7 @@ describe("plan, changes, apply", () => {
 
   test("a write run regenerates before it validates, so a slug left only in a stale copy passes", () => {
     const root = repoCopy();
-    const copy = "plugins/astack/skills/poteto-mode/references/agents/comment-sicko.md";
+    const copy = "plugins/astack/skills/auto/references/agents/comment-sicko.md";
     append(root, copy, "\nUse claude-opus-99 here.\n");
     expect(generate(root).status).toBe(0);
     expect(readFileSync(join(root, copy), "utf8")).toBe(

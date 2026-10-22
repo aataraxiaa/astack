@@ -103,7 +103,7 @@ describe("applySubstitutions", () => {
     const line = (slug) => `your configured hillclimb model (default \`${slug}\`)`;
     for (const slug of ["grok-4.7-xhigh-fast", "claude-fable-5-1-thinking-max", "gpt-6-sol-max"]) {
       expect(applySubstitutions(line(slug), RULES.substitutions, "skills/poteto-mode/playbooks/hillclimb.md").text).toBe(
-        "your configured hillclimb model (default in poteto-mode's Models section)",
+        "your configured hillclimb model (default in auto's Models section)",
       );
       expect(applySubstitutions(line(slug), RULES.substitutions, "skills/reflect/SKILL.md").text).toBe(
         "your configured hillclimb model (default in [Models](#models))",
@@ -135,7 +135,7 @@ describe("applySubstitutions", () => {
     ["skills/poteto-mode/playbooks/autopilot-full.md", "`/loop` works in local and cloud roots.", "On Claude Code, use the available `/loop` scheduler. On Codex, use an available scheduled task through the Codex mapping. If neither provides a durable wake-up, report the missing capability instead of claiming the audit is armed."],
     ["skills/benchmark-checklist/SKILL.md", "the core count with `nproc`", "the core count with an available host command (`nproc` on Linux or `sysctl -n hw.logicalcpu` on macOS)"],
     ["skills/poteto-mode/SKILL.md", "- Shipping UI / IDE / CLI → the matching control skill. `cursor-team-kit` publishes `control-cli` (CLIs and TUIs) and `control-ui` (browser / Electron / web UIs). For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.", "- Shipping UI / IDE / CLI → the driver skill. `run` ships with Claude Code and the model can invoke it for CLIs, TUIs, servers, and browser or Electron apps. The bundled `verify` runs only when the user types `/verify`, so for UIs use the project `verify` skill at `.claude/skills/verify/` (generate it with `/create-verification-skill`) and fall back to `run` when the repo has none. For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception."],
-    ["skills/poteto-mode/playbooks/autopilot-full.md", "with the matching control skill, such as `control-cli` or `control-ui` from `cursor-team-kit`, or a named driver where none exists", "with the driver selected through poteto-mode's Non-negotiables, or a named available driver where none exists"],
+    ["skills/poteto-mode/playbooks/autopilot-full.md", "with the matching control skill, such as `control-cli` or `control-ui` from `cursor-team-kit`, or a named driver where none exists", "with the driver selected through auto's Non-negotiables, or a named available driver where none exists"],
     [
       "skills/how/SKILL.md",
       "Each spawn below names a role line in the `pstack-models.mdc` rule and a default. Set `model` to that line's value, or to the default if the rule or the line is missing.",
@@ -189,7 +189,7 @@ describe("applySubstitutions", () => {
     [
       "skills/poteto-mode/playbooks/multi-phase-plan.md",
       'Explore in subagents with `subagent_type: "poteto-agent"` and an explicit model.',
-      'Explore in subagents with `subagent_type: "astack:poteto-agent"` and an explicit model.',
+      'Explore in subagents with `subagent_type: "astack:auto-agent"` and an explicit model.',
     ],
     [
       "skills/automate-me/SKILL.md",
@@ -314,7 +314,7 @@ describe("denylistHits", () => {
   test("UI repair advice points to the canonical driver policy", () => {
     const hits = denylistHits("playbook.md", "Drive with control-ui.", RULES.denylist);
     expect(hits).toHaveLength(1);
-    expect(hits[0]).toContain("poteto-mode/SKILL.md");
+    expect(hits[0]).toContain("auto/SKILL.md");
     expect(hits[0]).not.toContain("`verify` built-in");
   });
 
@@ -1221,7 +1221,7 @@ describe("sync CLI", () => {
     cpSync(join(import.meta.dir, "../plugins/astack/models.json"), join(port, "plugins/astack/models.json"));
     mkdirSync(join(port, "plugins/astack/skills"));
     writeFileSync(join(port, "plugins/astack/skills/s.md"), localText);
-    const codexTools = join(port, "plugins/astack/skills/poteto-mode/references/codex-tools.md");
+    const codexTools = join(port, "plugins/astack/skills/auto/references/codex-tools.md");
     mkdirSync(join(codexTools, ".."), { recursive: true });
     writeFileSync(codexTools, "| Skill | On Codex |\n|-------|----------|\n");
     for (const { skill } of JSON.parse(readFileSync(join(port, "plugins/astack/models.json"), "utf8")).roles) {
@@ -1295,7 +1295,7 @@ describe("sync CLI", () => {
       "\nforked (upstream untouched): 1\n     1 policy plugins/astack/skills/s.md\n     1 total changed lines\n",
     );
     expect(result.stderr).not.toContain("tools/forks.json");
-    const portOnly = [...roleSkills.map((skill) => `${skill}/SKILL.md`), "poteto-mode/references/codex-tools.md"];
+    const portOnly = [...roleSkills.map((skill) => `${skill}/SKILL.md`), "auto/references/codex-tools.md"];
     expect(result.stdout).toContain(`\nport-only: ${portOnly.length} files\n`);
     for (const rel of portOnly) expect(result.stdout).toContain(`\n  plugins/astack/skills/${rel}\n`);
   });
