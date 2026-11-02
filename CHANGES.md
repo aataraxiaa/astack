@@ -1,5 +1,9 @@
 # AStack changes
 
+## 0.1.7 - Generic development guidance
+
+Remove Apple-specific simulator cleanup commands, Xcode cache advice, Swift examples, and the mobile simulator assumption from shared workflows. Cleanup follows project toolchain instructions, and verification uses the shared driver-selection policy. Host compatibility and release infrastructure are unchanged.
+
 ## 0.1.6 - Rename the main workflow to auto
 
 The main workflow is now `auto`, its routing wrapper and effort variants are `auto-agent` and `auto-agent-<level>`, and setup guidance is `auto-help`. AStack keeps its plugin and package identity. Hooks, generated references, build paths, and upstream translation use the new local names.
