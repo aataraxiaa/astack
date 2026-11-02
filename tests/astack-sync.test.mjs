@@ -11,7 +11,7 @@ for (const scenario of ["overlap", "removed-upstream"]) {
       for (const name of ["old", "next", "local"]) mkdirSync(join(root, name));
       const put = (dir, name, text) => writeFileSync(join(root, dir, name), text);
       put("old", "policy.md", "old\n");
-      put("local", "policy.md", "apple adaptation\n");
+      put("local", "policy.md", "local adaptation\n");
       if (scenario === "overlap") put("next", "policy.md", "upstream change\n");
       put("old", "clean.md", "before\n");
       put("local", "clean.md", "before\n");
@@ -21,7 +21,7 @@ for (const scenario of ["overlap", "removed-upstream"]) {
         rules: [], denylist: [], failOnConflict: true,
       });
       expect(report.conflicts).toHaveLength(1);
-      expect(readFileSync(join(root, "local/policy.md"), "utf8")).toBe("apple adaptation\n");
+      expect(readFileSync(join(root, "local/policy.md"), "utf8")).toBe("local adaptation\n");
       expect(readFileSync(join(root, "local/clean.md"), "utf8")).toBe("before\n");
     } finally {
       rmSync(root, { recursive: true, force: true });

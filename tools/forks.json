@@ -32,7 +32,7 @@
     },
     "plugins/astack/skills/auto/SKILL.md": {
       "kind": "policy",
-      "why": "Adds the deploy-platform and defect-severity triggers and the port's principle summaries beside the Claude Code Platform Adaptation section and run-or-verify driver line. AStack keeps authorization boundaries explicit. Replacements must confirm existing writers stopped or isolate their mutable state. Routes verification through central local and installed plugin driver selection, preserves explicit choices, and keeps existing authorization and writer-isolation policies.",
+      "why": "Adds the deploy-platform and defect-severity triggers and the port's principle summaries beside the Claude Code Platform Adaptation section and run-or-verify driver line. AStack keeps authorization boundaries explicit. Replacements must confirm existing writers stopped or isolate their mutable state. Routes verification through central local and installed plugin driver selection, preserves explicit choices, and keeps existing authorization and writer-isolation policies. Keeps cleanup routing and process examples independent of a development platform.",
       "since": "0.9.2",
       "upstream": "not-proposed"
     },
@@ -68,7 +68,7 @@
     },
     "plugins/astack/skills/auto/playbooks/multi-phase-plan.md": {
       "kind": "port-feature",
-      "why": "Plans read skills from the installed plugin, keep the store under ~/.claude/orchestrate, and leave rebase and merge authority to the execution playbook.",
+      "why": "Plans read skills from the installed plugin, keep the store under ~/.claude/orchestrate, and leave rebase and merge authority to the execution playbook. Uses the shared driver-selection policy without assuming a mobile simulator.",
       "since": "0.9.19",
       "upstream": "not-proposed"
     },
@@ -303,6 +303,18 @@
     "plugins/astack/skills/auto/scripts/bun.lock": {
       "kind": "port-feature",
       "why": "Renames the bundled private workspace to auto-tools; lockfiles bypass text substitutions.",
+      "since": "0.1.6",
+      "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/auto/playbooks/worktree-cleanup.md": {
+      "kind": "policy",
+      "why": "Removes platform-specific simulator deletion and build-cache commands. Further cleanup follows measured disk use and project toolchain instructions.",
+      "since": "0.1.6",
+      "upstream": "not-proposed"
+    },
+    "plugins/astack/skills/principle-type-system-discipline/SKILL.md": {
+      "kind": "policy",
+      "why": "Omits Swift-specific examples from shared type-design guidance.",
       "since": "0.1.6",
       "upstream": "not-proposed"
     }

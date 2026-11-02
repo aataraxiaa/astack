@@ -23,3 +23,5 @@ The Codex adapter uses available tools and model capabilities rather than assumi
 New functionality should be placed in the smallest applicable layer. Platform-specific preferences belong in the consuming project’s instructions. When fixing a portability defect, add a behavioral fixture to the existing tests and make the translation reproducible.
 
 AStack owns `plugins/astack/skills/auto/references/verification-drivers.md`. It centralizes instruction-based selection of local and installed plugin drivers and separates the active product checkout, editable driver source, and installed runtime cache. The creator, maintainer, help, and Codex mapping use this policy. External drivers stay in their own plugin source repository and use native installation.
+
+Shared workflows omit platform-specific simulator cleanup commands and Swift examples. Cleanup follows the consuming project's toolchain instructions, and verification uses the shared driver-selection policy. Host compatibility guidance remains in place. These deliberate differences are recorded in `tools/forks.json`.
